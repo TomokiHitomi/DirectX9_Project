@@ -1,0 +1,17 @@
+# 特定の拡張子を無視する場合はどこにも/を付けない
+*.opendb
+*.sdf
+*.bin
+*.suo
+*.obj
+*.db
+
+# 特定のファイルを無視する場合は先頭に/を付ける
+/Thumbs.db
+/.DS_Store
+
+# 特定のディレクトリを無視する場合は先頭と末尾に/を付ける
+/Debug/
+/Release/
+/20180420_Bouldering/Debug/
+/20180420_Bouldering/Release/
