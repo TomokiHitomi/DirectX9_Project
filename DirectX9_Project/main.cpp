@@ -354,8 +354,6 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	InitDebugProc();
 #endif
 
-	cScene.ChangeScene(cScene.TITLE);
-
 
 	//InitFade();			// フェード
 

@@ -22,6 +22,8 @@
 class GameScene :public BaseScene
 {   // :public  BaseScene
 public:
+	GameScene(void);
+	~GameScene(void);
 	void Update(void);
 	void Draw(void);
 private:

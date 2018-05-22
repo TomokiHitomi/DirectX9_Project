@@ -22,6 +22,8 @@
 class ResultScene :public BaseScene
 {   // :public  BaseScene
 public:
+	ResultScene(void);
+	~ResultScene(void);
 	void Update(void);
 	void Draw(void);
 private:
