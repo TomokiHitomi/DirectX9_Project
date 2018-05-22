@@ -1,9 +1,42 @@
-﻿  game.cpp
-  コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
-  title.cpp
+﻿  title.cpp
   scene.cpp
   result.cpp
   main.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.cpp(114): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.cpp(278): warning C4244: '=': 'float' から 'UINT' への変換です。データが失われる可能性があります。
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.cpp(279): warning C4244: '=': 'float' から 'UINT' への変換です。データが失われる可能性があります。
+  input.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\input.cpp(336): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\input.cpp(762): warning C4244: '=': 'LONG' から 'float' への変換です。データが失われる可能性があります。
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\input.cpp(765): warning C4244: '=': 'LONG' から 'float' への変換です。データが失われる可能性があります。
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\input.cpp(766): warning C4244: '=': 'LONG' から 'float' への変換です。データが失われる可能性があります。
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\input.cpp(769): warning C4244: '引数': 'LONG' から 'FLOAT' への変換です。データが失われる可能性があります。
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\input.cpp(901): warning C4244: '引数': 'int' から 'FLOAT' への変換です。データが失われる可能性があります。
+  game.cpp
+  debugproc.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(76): warning C4838: 'float' から 'LONG' への変換には縮小変換が必要です
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(76): warning C4244: '初期化中': 'float' から 'LONG' への変換です。データが失われる可能性があります。
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(112): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(122): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(127): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(132): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(137): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(142): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(147): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(151): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 'sprintf' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(155): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: 'strcat' の宣言を確認してください
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\debugproc.cpp(164): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: 'strcat' の宣言を確認してください
+  SkinMeshX.cpp
+  コードを生成中...
   DirectX9_Project.vcxproj -> C:\Users\Hitomi\Documents\Visual Studio 2015\Projects\DirectX9_Project\Debug\DirectX9_Project.exe
   DirectX9_Project.vcxproj -> C:\Users\Hitomi\Documents\Visual Studio 2015\Projects\DirectX9_Project\Debug\DirectX9_Project.pdb (Full PDB)
