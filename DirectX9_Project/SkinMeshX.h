@@ -138,7 +138,7 @@ private:
 	// フレーム参照用配列
 	std::vector<MYFRAME*> m_FrameArray; // 全フレーム参照配列
 	std::vector<MYFRAME*> m_IntoMeshFrameArray;// メッシュコンテナありのフレーム参照配列
-											   //ボーン情報
+	//ボーン情報
 	LPD3DXFRAME m_pFrameRoot;
 	//アニメーションコントローラ
 	LPD3DXANIMATIONCONTROLLER m_pAnimController;
@@ -162,5 +162,49 @@ private:
 	//マテリアルデータ
 	D3DMATERIAL9 m_Material;
 };
+
+// アニメーション上位レベルインターフェイス
+interface IHighLevelAnimController
+{
+public:
+	// アニメーションコントローラを設定
+	bool SetAnimationController(ID3DXAnimationController *pAnimCont);
+	// アニメーションコントローラを取得
+	bool GetAnimationController(ID3DXAnimationController **ppAnimCont);
+	// ループ時間を設定
+	bool SetLoopTime(UINT animID, FLOAT time);
+	// 動作開始にかかる時間を設定
+	bool SetShiftTime(UINT animID, FLOAT interval);
+	// アニメーションを切り替え
+	bool ChangeAnimation(UINT animID);
+	// アニメーションを更新
+	bool AdvanceTime(FLOAT time);
+};
+
+
+
+// アニメーション上位レベル構造体
+struct HLANIMATION_DESC
+{
+	UINT uiAnimID;					// アニメーションID
+	ID3DXAnimationSet *pAnimSet;	// アニメーションセット
+	FLOAT fLoopTime;				// 1ループの時間
+	FLOAT fTrackSpeed;				// トラックスピード調節値
+	FLOAT fShiftTime;				// シフトするのにかかる時間
+	FLOAT fCurWeightTime;			// 現在のウェイト時間
+};
+
+class CHighLevelAnimController : IHighLevelAnimController
+{
+private:
+	HLANIMATION_DESC m_Anim;
+	CHighLevelAnimController operator=(CHighLevelAnimController& c) { return c; }
+public:
+	CHighLevelAnimController() { }
+	~CHighLevelAnimController() { }
+
+	bool SetLoopTime(UINT, FLOAT);
+};
+
 
 #endif

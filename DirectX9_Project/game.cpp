@@ -6,7 +6,14 @@
 //=============================================================================
 #include "game.h"
 
-/* Debug */
+/* 全体で必要なインクルード*/
+#include "input.h"
+#include "camera.h"
+
+/* ゲームで必要なインクルード */
+#include "player.h"
+
+/* デバッグ */
 #ifdef _DEBUG
 #include "debugproc.h"
 #endif
@@ -28,7 +35,14 @@
 //=============================================================================
 void GameScene::Update(void)
 {
+	UpdateInput();		// 入力
+
+	UpdatePlayer();		// プレイヤー
+
+	UpdateCamera();		// カメラ
+
 #ifdef _DEBUG
+	UpdateDebugProc();
 	PrintDebugProc("GameScene[Update]\n");
 #endif
 }
@@ -38,8 +52,13 @@ void GameScene::Update(void)
 //=============================================================================
 void GameScene::Draw(void)
 {
+	SetCamera();		// カメラ
+
+	DrawPlayer();		// プレイヤー
+
 #ifdef _DEBUG
 	PrintDebugProc("GameScene[Draw]\n");
+	DrawDebugProc();
 #endif
 }
 
@@ -48,7 +67,7 @@ void GameScene::Draw(void)
 //=============================================================================
 GameScene::GameScene(void)
 {
-
+	InitPlayer(0);
 }
 
 //=============================================================================
@@ -56,5 +75,5 @@ GameScene::GameScene(void)
 //=============================================================================
 GameScene::~GameScene(void)
 {
-
+	UninitPlayer();
 }

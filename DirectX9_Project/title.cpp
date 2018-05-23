@@ -6,6 +6,10 @@
 //=============================================================================
 #include "title.h"
 
+/* 全体で必要なインクルード*/
+#include "input.h"
+#include "camera.h"
+
 /* Debug */
 #ifdef _DEBUG
 #include "debugproc.h"
@@ -28,7 +32,13 @@
 //=============================================================================
 void TitleScene::Update(void)
 {
+	UpdateInput();		// 入力
+
+
+	UpdateCamera();		// カメラ
+
 #ifdef _DEBUG
+	UpdateDebugProc();
 	PrintDebugProc("TitleScene[Update]\n");
 #endif
 }
@@ -38,8 +48,11 @@ void TitleScene::Update(void)
 //=============================================================================
 void TitleScene::Draw(void)
 {
+	SetCamera();		// カメラ
+
 #ifdef _DEBUG
 	PrintDebugProc("TitleScene[Draw]\n");
+	DrawDebugProc();
 #endif
 }
 

@@ -21,10 +21,8 @@
 /* Stage */
 
 /* System */
-//#include "light.h"
-#include "input.h"
 #include "scene.h"
-
+#include "input.h"
 
 /* Debug */
 #ifdef _DEBUG
@@ -56,12 +54,7 @@ bool				g_bEndFlag = true;		// 終了フラグ
 //float g_fFogDensity = 0.8f;
 //D3DXCOLOR g_xFogColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-
-#ifdef _DEBUG
-bool				g_bDispDebug = true;	// デバッグ表示ON/OFF
-#endif
-
-SceneManager cScene;
+SceneManager g_cScene;
 
 //=============================================================================
 // メイン関数
@@ -342,27 +335,8 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
 
-	// 入力の初期化処理
-	InitInput(hInstance, hWnd);
-
-	//// サウンドの初期化処理
-	//InitSound(hWnd);
-
-
-#ifdef _DEBUG
-	// デバッグ表示処理の初期化
-	InitDebugProc();
-#endif
-
-
-	//InitFade();			// フェード
-
-	//// 雲の初期化
-	//InitMeshcloud(D3DXVECTOR3(MESHCLOUD_POS_X, 0.0f, MESHCLOUD_POS_Z),
-	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f), MESHCLOUD_X, MESHCLOUD_Z, MESHCLOUD_SIZE_X, MESHCLOUD_SIZE_Z, 0);
-
-	//// 各種初期化処理（ステージ）
-	//InitSystem(STAGE_TITLE);
+	// シーンの初期化処理
+	g_cScene.Init(hInstance, hWnd);
 
 	return S_OK;
 }
@@ -384,60 +358,8 @@ void Uninit(void)
 		g_pD3D = NULL;
 	}
 
-	// 入力の終了処理
-	UninitInput();
-
-#ifdef _DEBUG
-	// デバッグ表示処理の終了処理
-	UninitDebugProc();
-#endif
-
-	//UninitCamera();			// カメラ
-	//UninitSkydome();		// スカイドーム
-	//UninitSkydomeeffect();	// スカイドームエフェクト
-	//UninitEnemy();			// エネミー
-	//UninitEnemy_normal();	// エネミーノーマル
-	//UninitEnemy_boss();		// エネミーボス
-	////UninitField();		// 地面
-	////UninitWall();			// 壁
-	//UninitMeshcloud();		// 雲海
-	//UninitCloud();			// 雲
-	//UninitCloudfield();		// 雲フィールド
-	//UninitEnemybullet();	// エネミーバレット
-	//UninitBullet();			// バレット
-	//UninitBulletQua();		// バレットクォータニオン（エネミー）
-	//UninitHiteffect();		// ヒットエフェクト
-	//UninitModel();			// モデル
-	//UninitPlayer();			// プレイヤー
-	//UninitShadow();			// 影
-	//UninitEffect();			// エフェクト
-	//UninitReticle();		// レティクル
-	//UninitMagic();			// 魔法陣
-	//UninitMagiccircle();	// 魔法サークル
-	//UninitPointer();		// ポイント
-	//UninitMinimap();		// ミニマップ
-	//UninitLockon();			// ロックオン
-	//UninitTitle();			// タイトル
-	//UninitTitlemenu();		// タイトルメニュー
-	//UninitVersion();		// バージョン
-	//UninitCopyright();		// コピーライト
-	//UninitResult();			// リザルト
-	//UninitParameter();		// エネミーHPゲージ
-	//UninitDamageeffect();	// ダメージエフェクト
-	//UninitGage();			// ゲージ
-	//UninitGagefream();		// ゲージフレーム
-	//UninitGageback();		// ゲージバック
-	//UninitGageselect();		// ゲージセレクト
-	//UninitMagiceffect();	// マジックエフェクト
-	//UninitRanking();		// ランキング
-	//UninitRank();			// ランク
-	//UninitJoyconhelp();		// Joyconヘルプ
-	//UninitTimefream();		// タイムフレーム
-	//UninitTime();			// タイム
-	//UninitTimeranking();	// タイムランキング
-	//UninitPause();			// ポーズ
-	//UninitPausemenu();		// ポーズメニュー
-	//UninitFade();			// フェード
+	// シーンの終了処理
+	g_cScene.Uninit();
 }
 
 //=============================================================================
@@ -445,33 +367,21 @@ void Uninit(void)
 //=============================================================================
 void Update(void)
 {
-	// 入力の更新処理
-	UpdateInput();
-
-#ifdef _DEBUG
-	if (GetKeyboardTrigger(DIK_F1))
-	{// デバッグ表示ON/OFF
-		g_bDispDebug = g_bDispDebug ? false : true;
-	}
-	UpdateDebugProc();
-#endif
-
 	if (GetKeyboardTrigger(DIK_1))
 	{
-		cScene.ChangeScene(cScene.TITLE);
+		g_cScene.ChangeScene(g_cScene.TITLE);
 	}
 	if (GetKeyboardTrigger(DIK_2))
 	{
-		cScene.ChangeScene(cScene.GAME);
+		g_cScene.ChangeScene(g_cScene.GAME);
 	}
 	if (GetKeyboardTrigger(DIK_3))
 	{
-		cScene.ChangeScene(cScene.RESULT);
+		g_cScene.ChangeScene(g_cScene.RESULT);
 	}
 
-
 	// 更新処理
-	cScene.Update();
+	g_cScene.Update();
 }
 
 //=============================================================================
@@ -485,15 +395,8 @@ void Draw(void)
 	// 描画の開始
 	if(SUCCEEDED(g_pD3DDevice->BeginScene()))
 	{
-		cScene.Render();
-
-#ifdef _DEBUG
-		// デバッグ表示処理の描画
-		if (g_bDispDebug)
-		{
-			DrawDebugProc();
-		}
-#endif
+		// 描画処理
+		g_cScene.Draw();
 
 		// 描画の終了
 		g_pD3DDevice->EndScene();
@@ -518,98 +421,4 @@ LPDIRECT3DDEVICE9 GetDevice(void)
 int *GetTotalCount(void)
 {
 	return(&g_nTotalCount);
-}
-
-//=============================================================================
-// 初期化
-//=====================asas========================================================
-void InitSystem(int nType)
-{
-	//if (nType == 0)
-	//{
-	//	InitShadow(nType);		// 影
-	//}
-
-	//if (g_eStage == STAGE_TITLE)
-	//{
-	//	InitStage();
-	//}
-
-
-	//InitShadow(nType);			// 影
-	//InitGame();					// ゲーム管理
-	//InitMeshcloudPos();			// 雲海座標
-	//InitCloudfield(nType);		// 雲フィールド
-	//InitTimefream(nType);		// タイムフレーム
-	//InitTime(nType);			// タイム
-	//InitVersion(nType);			// バージョン
-	//InitCopyright(nType);		// コピーライト
-	//InitEnemy(nType);			// エネミー
-	//InitEnemy_normal(nType);	// エネミーノーマル
-	//InitEnemy_boss(nType);		// エネミーボス
-	//InitPlayer(nType);			// プレイヤー
-	//InitModel(nType);			// モデル
-	//InitTitle(nType);			// タイトル
-	//InitTitlemenu(nType);		// タイトルメニュー
-	//InitPause(nType);			// ポーズ
-	//InitPausemenu(nType);		// ポーズメニュー
-	//InitResult(nType);			// リザルト
-	//InitSkydome(nType);			// スカイドーム
-	//InitSkydomeeffect(nType);	// スカイドームエフェクト
-	//InitCloud(nType);			// 雲
-	////InitField(nType);			// 地面
-	//InitWall(nType);			// 壁
-	//InitEnemybullet(nType);		// バレットエネミー
-	//InitBullet(nType);			// バレット
-	//InitBulletQua(nType);		// バレットクォータニオン（エネミー）
-	//InitHiteffect(nType);		// ヒットエフェクト
-	//InitLockon(nType);			// ロックオン
-	//InitEffect(nType);			// エフェクト
-	//InitParameter(nType);		// パラメーター
-	//InitReticle(nType);			// レティクル
-	//InitMagic(nType);			// マジック（スキル）
-	//InitMagiccircle(nType);		// マジックサークル
-	//InitMagiceffect(nType);		// マジックエフェクト
-	//InitDamageeffect(nType);	// ダメージエフェクト
-	//InitMinimap(nType);			// ミニマップ
-	//InitJoyconhelp(nType);		// Joyconヘルプ
-	//InitGage(nType);			// ゲージ
-	//InitGagefream(nType);		// ゲージフレーム
-	//InitGageback(nType);		// ゲージバック
-	//InitGageselect(nType);		// ゲージセレクト
-	//InitPointer(nType);			// ポイント
-	//InitRanking(nType);			// ランキング
-	//InitTimeranking(nType);		// タイムランキング
-	//InitRank(nType);			// ランク
-	//InitLight();				// ライト
-	//InitCamera();				// カメラ
-
-	//if (nType == 1)
-	//{
-	//	InitShadow(nType);		// 影
-	//}
-}
-
-//=============================================================================
-// ステージ遷移処理
-//=============================================================================
-void SetStage(E_STAGE eStage)
-{
-	g_eStage = eStage;
-}
-
-//=============================================================================
-// ステージ取得処理
-//=============================================================================
-E_STAGE GetStage(void)
-{
-	return g_eStage;
-}
-
-//=============================================================================
-// 終了フラグ
-//=============================================================================
-void SetEndFlag(void)
-{
-	g_bEndFlag = false;
 }

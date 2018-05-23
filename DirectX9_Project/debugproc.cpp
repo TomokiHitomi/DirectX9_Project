@@ -22,6 +22,7 @@
 LPD3DXFONT	g_pD3DXFont = NULL;			// フォントへのポインタ
 char		g_aStrDebug[4096] = {"\0"};	// デバッグ情報
 int			g_nDrawPos = 0;
+bool		g_bDispDebug = true;
 
 //=============================================================================
 // デバッグ表示処理の初期化
@@ -58,13 +59,17 @@ void UninitDebugProc(void)
 //=============================================================================
 void UpdateDebugProc(void)
 {
-	if (GetKeyboardPress(DIK_9))
+	SetDebugProc();
+	if (g_bDispDebug)
 	{
-		g_nDrawPos += DEBUG_SCROLL_SPEED;
-	}
-	if (GetKeyboardPress(DIK_0))
-	{
-		g_nDrawPos -= DEBUG_SCROLL_SPEED;
+		if (GetKeyboardPress(DIK_9))
+		{
+			g_nDrawPos += DEBUG_SCROLL_SPEED;
+		}
+		else if (GetKeyboardPress(DIK_0))
+		{
+			g_nDrawPos -= DEBUG_SCROLL_SPEED;
+		}
 	}
 }
 
@@ -73,13 +78,16 @@ void UpdateDebugProc(void)
 //=============================================================================
 void DrawDebugProc(void)
 {
-	RECT rect = {0, g_nDrawPos, SCREEN_WIDTH, SCREEN_HEIGHT};
+	if (g_bDispDebug)
+	{
+		RECT rect = { 0, g_nDrawPos, SCREEN_WIDTH, SCREEN_HEIGHT };
 
-	// 情報表示
-	g_pD3DXFont->DrawText(NULL, g_aStrDebug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+		// 情報表示
+		g_pD3DXFont->DrawText(NULL, g_aStrDebug, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 
-	// 情報クリア
-	memset(g_aStrDebug, 0, sizeof g_aStrDebug);
+		// 情報クリア
+		memset(g_aStrDebug, 0, sizeof g_aStrDebug);
+	}
 }
 
 //=============================================================================
@@ -164,5 +172,24 @@ void PrintDebugProc(char *fmt,...)
 		strcat(g_aStrDebug, aBuf);
 	}
 #endif
+}
+
+//=============================================================================
+// デバッグ表示切替関数
+//=============================================================================
+void SetDebugProc(void)
+{
+	if (GetKeyboardTrigger(DIK_F1))
+	{// デバッグ表示ON/OFF
+		g_bDispDebug = g_bDispDebug ? false : true;
+	}
+}
+
+//=============================================================================
+// デバッグ表示取得関数
+//=============================================================================
+bool GetDebugProc(void)
+{
+	return g_bDispDebug;
 }
 

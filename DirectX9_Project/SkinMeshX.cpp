@@ -837,3 +837,17 @@ D3DXMATRIX* CSkinMesh::GetpBoneMatrix(LPSTR _BoneName) {
 		return NULL;
 	}
 }
+
+//bool CHighLevelAnimController::SetLoopTime(UINT animID, FLOAT time)
+//{
+//	// 指定のアニメーションIDの存在をチェック
+//	if (m_Anim.size() <= animID)
+//		return false;
+//
+//	// トラックスピード調節値を算出
+//	FLOAT DefTime = m_Anim[animID].pAnimSet->GetPeriod();
+//	m_Anim[animID].fLoopTime = time;
+//	m_Anim[animID].fTrackSpeed = DefTime / time;
+//		
+//	return true;
+//}

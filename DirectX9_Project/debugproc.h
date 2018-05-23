@@ -23,5 +23,7 @@ void UpdateDebugProc(void);
 void DrawDebugProc(void);
 
 void PrintDebugProc(char *fmt,...);
+void SetDebugProc(void);
+bool GetDebugProc(void);
 
 #endif

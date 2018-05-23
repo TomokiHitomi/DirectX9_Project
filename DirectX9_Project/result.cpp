@@ -6,6 +6,10 @@
 //=============================================================================
 #include "result.h"
 
+/* 全体で必要なインクルード*/
+#include "input.h"
+#include "camera.h"
+
 /* Debug */
 #ifdef _DEBUG
 #include "debugproc.h"
@@ -28,7 +32,13 @@
 //=============================================================================
 void ResultScene::Update(void)
 {
+	UpdateInput();		// 入力
+
+
+	UpdateCamera();		// カメラ
+
 #ifdef _DEBUG
+	UpdateDebugProc();
 	PrintDebugProc("ResultScene[Update]\n");
 #endif
 }
@@ -38,8 +48,11 @@ void ResultScene::Update(void)
 //=============================================================================
 void ResultScene::Draw(void)
 {
+	SetCamera();		// カメラ
+
 #ifdef _DEBUG
 	PrintDebugProc("ResultScene[Draw]\n");
+	DrawDebugProc();
 #endif
 }
 

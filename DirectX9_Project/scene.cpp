@@ -9,7 +9,12 @@
 #include "game.h"
 #include "result.h"
 
-/* Debug */
+/* 全体で使うインクルード */
+#include "camera.h"
+#include "light.h"
+#include "input.h"
+
+/* デバッグ */
 #ifdef _DEBUG
 #include "debugproc.h"
 #endif
@@ -55,6 +60,41 @@ void SceneManager::ChangeScene(SCENE scene)
 }
 
 //=============================================================================
+// 初期化処理
+//=============================================================================
+void SceneManager::Init(HINSTANCE hInst, HWND hWnd)
+{
+	ChangeScene(TITLE);			// 初期シーン設定
+	InitLight();				// ライト
+
+	InitInput(hInst, hWnd);		// 入力
+	InitCamera();				// カメラ
+
+	//InitSound(hWnd);			// サウンド
+	//InitFade();					// フェード
+
+#ifdef _DEBUG
+	InitDebugProc();			// デバッグ
+#endif
+}
+
+//=============================================================================
+// 終了処理
+//=============================================================================
+void SceneManager::Uninit()
+{
+	UninitInput();			// 入力
+	UninitCamera();			// カメラ
+
+	//UninitSound();			// サウンド
+	//UninitFade();			// フェード
+
+#ifdef _DEBUG
+	UninitDebugProc();		// デバッグ
+#endif
+}
+
+//=============================================================================
 // 更新処理
 //=============================================================================
 void SceneManager::Update()
@@ -65,7 +105,7 @@ void SceneManager::Update()
 //=============================================================================
 // 描画処理
 //=============================================================================
-void SceneManager::Render()
+void SceneManager::Draw()
 {
 	m_pScene->Draw();		//現在のシーンの描画関数
 }
@@ -75,7 +115,7 @@ void SceneManager::Render()
 //=============================================================================
 SceneManager::SceneManager(void)
 {
-	ChangeScene(TITLE);
+
 }
 
 //=============================================================================

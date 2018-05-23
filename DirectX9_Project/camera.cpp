@@ -23,7 +23,6 @@
 //*****************************************************************************
 D3DXVECTOR3 GetLookAtVct(void);
 void SetCameraAt(void);
-void SetCameraAngle(E_STAGE eStage);
 
 //*****************************************************************************
 // グローバル変数
@@ -40,34 +39,23 @@ void InitCamera(void)
 {
 	CAMERA *camera = &cameraWk[0];
 
-	for (int i = 0; i < CAMERA_MAX; i++, camera++)
-	{
-		switch (g_nCameraMode)
-		{
-		case CAMERA_GAME:
-			SetCameraAngle(GetStage());
-
-			camera->fHAngleMargin = 0.0f;
-			camera->bCameraReverse = false;
-
-			break;
-		case CAMERA_VIEW:
-			camera->posCameraEye = D3DXVECTOR3(POS_X_CAM, POS_Y_CAM, POS_Z_CAM);
-			camera->posCameraAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			camera->vecCameraUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-
-			camera->fVAngle = CAMERA_V_ANGLE * 1.3f;
-			camera->fHAngle = CAMERA_H_ANGLE;
-			camera->fHAngleMargin = 0.0f;
-			camera->fLength = CAMERA_LENGTH_VIEW;
-			camera->fLengthTemp = 0;
-			break;
-		}
-		camera->fMoveSpeed = CAMERA_MOVE_SPEED;
-		camera->nSetCount = 0;
-		g_nCameraMode++;
-		camera->nMode = CAMERA_NORMAL;
-	}
+	camera->fHAngleMargin = 0.0f;
+	camera->bCameraReverse = false;
+	camera->fMoveSpeed = CAMERA_MOVE_SPEED;
+	camera->nSetCount = 0;
+	camera->nMode = CAMERA_NORMAL;
+	camera->posCameraEye = D3DXVECTOR3(POS_X_CAM, POS_Y_CAM, POS_Z_CAM);
+	camera->posCameraAt = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
+	camera->vecCameraAtPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	camera->vecCameraUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	camera->posCameraAtTps = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
+	camera->posCameraAtNormal = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
+	camera->fVAngle = CAMERA_V_ANGLE_GAME;
+	camera->fHAngle = CAMERA_H_ANGLE + D3DX_PI;
+	camera->fVAngleDiff = CAMERA_V_ANGLE_GAME;
+	camera->fHAngleDiff = CAMERA_H_ANGLE + D3DX_PI;
+	camera->fLength = CAMERA_LENGTH_GAME_NORMAL;
+	camera->fLengthTemp = CAMERA_LENGTH_GAME_NORMAL;
 
 	g_nCameraMode = CAMERA_GAME;
 }
@@ -84,24 +72,10 @@ void UninitCamera(void)
 //=============================================================================
 void UpdateCamera(void)
 {
-	CAMERA	*camera = &cameraWk[g_nCameraMode];
+	CAMERA	*camera = &cameraWk[0];
 
 	// カメラ上下反転用
 	int nCameraReverse = 1;
-
-	D3DXVECTOR3 vecVl = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 vecVr = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	float fDotTest = 0.0f;
-
-	D3DXVECTOR3 vecRet = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	D3DXVECTOR3 vecBasePos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	// Y軸カメラサスペンション
-	float fHeight = 0.0f;
-
-	// Joy-con用ジャイロ
-	D3DXVECTOR3 vecGyro = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// クォータニオン用変数
 	// 回転半径を設定
@@ -146,23 +120,6 @@ void UpdateCamera(void)
 		//camera->fHAngleDiff = PiCalculate360(camera->fHAngle);
 	}
 
-	// カメラ左右回転（Joy-con）
-	if (IsButtonPressed(0, RSTICK_LEFT) || IsButtonPressed(0, RSTICK_RIGHT))
-	{
-		camera->fHAngleDiff -= CAMERA_ROT_SPEED * GetStick(0, PAD_STICK_R_X);
-		//camera->fHAngleDiff = PiCalculate360(camera->fHAngle);
-	}
-
-	// カメラ上下反転
-	if (GetKeyboardTrigger(DIK_F2))
-	{
-		camera->bCameraReverse = camera->bCameraReverse ? false : true;
-	}
-	if (camera->bCameraReverse)
-	{
-		nCameraReverse *= -1;
-	}
-
 	// カメラ上下回転（キーボード）
 	if (GetKeyboardPress(DIK_UP) && GetKeyboardPress(DIK_DOWN))
 	{
@@ -182,39 +139,13 @@ void UpdateCamera(void)
 		camera->fVAngleDiff += ((float)GetMobUseY()) * CAMERA_ROT_MOUSE_Y * nCameraReverse;
 	}
 
-	//// カメラ上下回転（Joy-con）
-	//if (IsButtonPressed(0, RSTICK_UP) || IsButtonPressed(0, RSTICK_DOWN))
-	//{
-	//	camera->fVAngleDiff += CAMERA_ROT_SPEED  * GetStick(0, PAD_STICK_R_Y) * nCameraReverse;
-	//}
-
-	//// 照準モード切替（押下中TPSモード）
-	//if (IsMobUseRightPressed())
-	//{
-	//	SetCameraGameMode(CAMERA_TPS);
-	//}
-	//else if (g_nCameraGameMode == CAMERA_TPS)
-	//{
-	//	SetCameraGameMode(CAMERA_NORMAL);
-	//}
-
-
-	// Joy-con縦アングルリセット
-	if (IsButtonPressed(0, R_BUTTON_Y))
+	// マウスホイール
+	long ModUseZ = GetMobUseZ();
+	if (ModUseZ != 0)
 	{
-		camera->fVAngleDiff = CAMERA_V_ANGLE_GAME;
+		camera->fLength -= ModUseZ * CAMERA_LENGTH_SPEED;
 	}
 
-	// Joy-conジャイロ取得
-	vecGyro = GetGyro();
-
-	// Joy-conジャイロを角度に適用
-	camera->fVAngleDiff -= vecGyro.x * nCameraReverse;
-	camera->fHAngleDiff -= vecGyro.y;
-	camera->fHAngleDiff += vecGyro.z;
-
-	//camera->fVAngleDiff -= GetRglSlider(PAD_SLIDER_V);
-	//camera->fHAngleDiff -= GetRglSlider(PAD_SLIDER_H);
 
 	camera->fVAngle += (camera->fVAngleDiff - camera->fVAngle) * CAMERA_ROT_SPEED_AUTO;
 	camera->fHAngle += (camera->fHAngleDiff - camera->fHAngle) * CAMERA_ROT_SPEED_AUTO;
@@ -232,14 +163,14 @@ void UpdateCamera(void)
 	}
 
 	// カメラ注視点をセット
-	camera->posCameraAt = D3DXVECTOR3(
-		(model->posModel.x
-			+ (camera->vecCameraAtPos.x * cos(camera->fHAngle + D3DX_PI * 1.5f))
-			+ (camera->vecCameraAtPos.z * cos(camera->fHAngle + D3DX_PI * 2.0f))),
-		fHeight,
-		(model->posModel.z
-			+ (camera->vecCameraAtPos.x * sin(camera->fHAngle + D3DX_PI * 1.5f))
-			+ (camera->vecCameraAtPos.z * sin(camera->fHAngle + D3DX_PI * 2.0f))));
+	//camera->posCameraAt = D3DXVECTOR3(
+	//	(model->posModel.x
+	//		+ (camera->vecCameraAtPos.x * cos(camera->fHAngle + D3DX_PI * 1.5f))
+	//		+ (camera->vecCameraAtPos.z * cos(camera->fHAngle + D3DX_PI * 2.0f))),
+	//	fHeight,
+	//	(model->posModel.z
+	//		+ (camera->vecCameraAtPos.x * sin(camera->fHAngle + D3DX_PI * 1.5f))
+	//		+ (camera->vecCameraAtPos.z * sin(camera->fHAngle + D3DX_PI * 2.0f))));
 
 	// クォータニオン処理
 	QuaternionCalculate(&vecTa, &vecAxis, camera->fVAngle,
@@ -452,55 +383,4 @@ void SetCameraTag(int no)
 {
 	CAMERA *camera = &cameraWk[0];
 	g_nCameraTag = no;
-}
-
-//=============================================================================
-// カメラターゲット変更関数
-//=============================================================================
-void SetCameraAngle(E_STAGE eStage)
-{
-	CAMERA *camera = &cameraWk[0];
-	switch (eStage)
-	{
-	case STAGE_TITLE:
-		camera->posCameraEye = D3DXVECTOR3(POS_X_CAM, POS_Y_CAM, POS_Z_CAM);
-		camera->posCameraAt = D3DXVECTOR3(15000.0f, 4000.0f, 10000.0f);;
-		camera->vecCameraUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-
-		camera->posCameraAtTps = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
-		camera->posCameraAtNormal = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
-
-		camera->fVAngle = CAMERA_TITLE_V_ANGLE;
-		camera->fHAngle = CAMERA_TITLE_H_ANGLE;
-		camera->fLength = CAMERA_TITLE_LENGTH;
-		break;
-	case STAGE_GAME:
-		camera->posCameraEye = D3DXVECTOR3(POS_X_CAM, POS_Y_CAM, POS_Z_CAM);
-		camera->posCameraAt = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
-		camera->vecCameraAtPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		camera->vecCameraUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-
-		camera->posCameraAtTps = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
-		camera->posCameraAtNormal = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
-
-		camera->fVAngle = CAMERA_V_ANGLE_GAME;
-		camera->fHAngle = CAMERA_H_ANGLE + D3DX_PI;
-		camera->fVAngleDiff = CAMERA_V_ANGLE_GAME;
-		camera->fHAngleDiff = CAMERA_H_ANGLE + D3DX_PI;
-		camera->fLength = CAMERA_LENGTH_GAME_NORMAL;
-		camera->fLengthTemp = CAMERA_LENGTH_GAME_NORMAL;
-		break;
-	case STAGE_RESULT:			camera->posCameraEye = D3DXVECTOR3(POS_X_CAM, POS_Y_CAM, POS_Z_CAM);
-		camera->posCameraAt = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
-		camera->vecCameraUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-
-		camera->posCameraAtTps = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
-		camera->posCameraAtNormal = D3DXVECTOR3(0.0f, CAMERA_GAME_HEIGHT, 0.0f);
-
-
-		camera->fVAngle = CAMERA_RESULT_V_ANGLE;
-		camera->fHAngle = CAMERA_RESULT_H_ANGLE;
-		camera->fLength = CAMERA_RESULT_LENGTH;
-		break;
-	}
 }

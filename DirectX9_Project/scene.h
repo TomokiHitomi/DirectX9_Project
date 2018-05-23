@@ -37,11 +37,13 @@ public:
 	};
 	SceneManager(void);
 	~SceneManager(void);
-	static void ChangeScene(SCENE scene);	//シーンを引数によって変える関数
-	static void Update(void);				//現在のシーンの更新関数
-	static void Render(void);				//現在のシーンの描画関数
+	static void ChangeScene(SCENE scene);			// シーンを引数によって変える関数
+	static void Init(HINSTANCE hInst, HWND hWnd);	// シーンの初期化関数
+	static void Uninit(void);						// シーンの終了関数
+	static void Update(void);						// シーンの更新関数
+	static void Draw(void);							// シーンの描画関数
 private:
-	static BaseScene *m_pScene;				//現在のシーン
+	static BaseScene *m_pScene;						//現在のシーン
 };
 
 //*****************************************************************************
