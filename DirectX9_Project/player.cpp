@@ -115,7 +115,7 @@ void DrawPlayer(void)
 //=============================================================================
 // アニメーション設定関数
 //=============================================================================
-void SetPlayerAnime(int nPlayer,DWORD dAnime)
+void SetPlayerAnime(int nPlayer,DWORD dwAnime, FLOAT fShift)
 {
 	PLAYER *player = GetPlayer(nPlayer);
 	//MODEL *model = GetModel(0);
@@ -131,9 +131,9 @@ void SetPlayerAnime(int nPlayer,DWORD dAnime)
 	//}
 
 	//dAnime = ANIME_MAX - dAnime - 1;
-	if (dAnime != player->m_CSkinMesh.GetAnimTrack())
+	if (dwAnime != player->m_CSkinMesh.GetAnimTrack())
 	{
-		player->m_CSkinMesh.ChangeAnim(dAnime);
+		player->m_CSkinMesh.ChangeAnim(dwAnime,fShift);
 
 	//	if (dwTemp == ANIME08)
 	//	{

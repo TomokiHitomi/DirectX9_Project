@@ -22,8 +22,11 @@
 #define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
 #define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
 
-//#define SKIN_ANIME_SPEED 60.0f / 4800.0f
-#define SKIN_ANIME_SPEED 60.0f / 1500.0f
+//#define SKIN_ANIME_SPEED	(60.0f / 4800.0f)
+#define SKIN_ANIME_SPEED	(60.0f / 1500.0f)
+#define SKIN_ANIME_WEIGHT	(0.05f)
+
+#define ANIMATION_SET_MAX	(25)
 
 //*****************************************************************************
 // 構造体定義
@@ -65,7 +68,6 @@ struct MYMESHCONTAINER : public D3DXMESHCONTAINER
 		pBoneOffsetMatrices = NULL;
 	}
 };
-
 
 //*****************************************************************************
 // クラス定義
@@ -112,7 +114,7 @@ public:
 	//描画処理
 	VOID Draw(LPDIRECT3DDEVICE9 lpD3DDevice, PRS prs);
 	//オブジェクトのアニメーション変更( メッシュオブジェクトの操作用番号, 変更するアニメーション番号 )
-	VOID ChangeAnim(DWORD NewAnimNum);
+	VOID CSkinMesh::ChangeAnim(DWORD _NewAnimNum, FLOAT fShift);
 	//現在のアニメーション番号取得
 	DWORD GetAnimTrack() { return m_CurrentTrack; }
 	//現在のアニメーションタイム(アニメーション開始からの時間)を取得
@@ -138,14 +140,14 @@ private:
 	// フレーム参照用配列
 	std::vector<MYFRAME*> m_FrameArray; // 全フレーム参照配列
 	std::vector<MYFRAME*> m_IntoMeshFrameArray;// メッシュコンテナありのフレーム参照配列
-	//ボーン情報
+											   //ボーン情報
 	LPD3DXFRAME m_pFrameRoot;
 	//アニメーションコントローラ
 	LPD3DXANIMATIONCONTROLLER m_pAnimController;
 	//ヒエラルキークラス変数
 	MY_HIERARCHY m_cHierarchy;
 	//アニメーションデータ格納用変数(ここは可変に変更したほうがいい)
-	LPD3DXANIMATIONSET m_pAnimSet[25];
+	LPD3DXANIMATIONSET m_pAnimSet[ANIMATION_SET_MAX];
 	//現在のアニメーションが開始されてからの時間(1/60秒)
 	DWORD m_AnimeTime;
 	//アニメーションスピード
@@ -161,50 +163,12 @@ private:
 	BOOL m_MaterialFlg;
 	//マテリアルデータ
 	D3DMATERIAL9 m_Material;
+
+	// モーションブレンド用追加プロパティ
+	FLOAT	m_fShiftTime;			// シフトするのにかかる時間
+	FLOAT	m_fCurWeight;			// 現在のウェイト時間
+	DWORD	m_OldTrack;				// 変更前アニメーショントラック
+
 };
-
-// アニメーション上位レベルインターフェイス
-interface IHighLevelAnimController
-{
-public:
-	// アニメーションコントローラを設定
-	bool SetAnimationController(ID3DXAnimationController *pAnimCont);
-	// アニメーションコントローラを取得
-	bool GetAnimationController(ID3DXAnimationController **ppAnimCont);
-	// ループ時間を設定
-	bool SetLoopTime(UINT animID, FLOAT time);
-	// 動作開始にかかる時間を設定
-	bool SetShiftTime(UINT animID, FLOAT interval);
-	// アニメーションを切り替え
-	bool ChangeAnimation(UINT animID);
-	// アニメーションを更新
-	bool AdvanceTime(FLOAT time);
-};
-
-
-
-// アニメーション上位レベル構造体
-struct HLANIMATION_DESC
-{
-	UINT uiAnimID;					// アニメーションID
-	ID3DXAnimationSet *pAnimSet;	// アニメーションセット
-	FLOAT fLoopTime;				// 1ループの時間
-	FLOAT fTrackSpeed;				// トラックスピード調節値
-	FLOAT fShiftTime;				// シフトするのにかかる時間
-	FLOAT fCurWeightTime;			// 現在のウェイト時間
-};
-
-class CHighLevelAnimController : IHighLevelAnimController
-{
-private:
-	HLANIMATION_DESC m_Anim;
-	CHighLevelAnimController operator=(CHighLevelAnimController& c) { return c; }
-public:
-	CHighLevelAnimController() { }
-	~CHighLevelAnimController() { }
-
-	bool SetLoopTime(UINT, FLOAT);
-};
-
 
 #endif

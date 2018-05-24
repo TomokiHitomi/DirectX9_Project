@@ -206,6 +206,6 @@ HRESULT InitPlayer(int nType);
 void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
-void SetPlayerAnime(int nPlayer, DWORD dAnime);
+void SetPlayerAnime(int nPlayer, DWORD dwAnime, FLOAT fShift);
 PLAYER *GetPlayer(int no);
 #endif

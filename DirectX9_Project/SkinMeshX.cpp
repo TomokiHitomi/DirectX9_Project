@@ -358,7 +358,8 @@ HRESULT MY_HIERARCHY::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBas
 //=============================================================================
 // 初期化関数
 //=============================================================================
-CSkinMesh::CSkinMesh() {
+CSkinMesh::CSkinMesh()
+{
 	//マテリアル変更フラグ
 	m_MaterialFlg = FALSE;
 	//マテリアルデータ
@@ -369,7 +370,7 @@ CSkinMesh::CSkinMesh() {
 	m_AnimeTime = 0;
 	//アニメーションスピード初期化
 	m_AnimSpeed = SKIN_ANIME_SPEED; //固定
-	//現在のアニメーショントラック初期化
+									//現在のアニメーショントラック初期化
 	m_CurrentTrack = 0;
 	//アニメーションデータトラック初期化
 	//有効にする
@@ -380,12 +381,15 @@ CSkinMesh::CSkinMesh() {
 	m_CurrentTrackDesc.Position = 0;
 	//速度
 	m_CurrentTrackDesc.Speed = 1;
+	// 次のアニメーションへシフトするのにかかる時間
+	m_fShiftTime = SKIN_ANIME_WEIGHT;
 }
 
 //=============================================================================
 // ボーン解放関数
 //=============================================================================
-VOID CSkinMesh::Release() {
+VOID CSkinMesh::Release()
+{
 	if (m_pFrameRoot != NULL) {
 		//ボーンフレーム関係解放
 		FreeAnim(m_pFrameRoot);
@@ -717,19 +721,19 @@ VOID CSkinMesh::Update(D3DXMATRIX _World) {
 	//押しっぱなしによる連続切り替え防止
 	static bool PushFlg = false; //ここでは仮でフラグを使用するが、本来はメンバ変数などにする
 								 //アニメーション変更チェック
-	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) || (GetAsyncKeyState(VK_RIGHT) & 0x8000)) {
-		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+	if ((GetAsyncKeyState(0x37) & 0x8000) || (GetAsyncKeyState(0x38) & 0x8000)) {
+		if (GetAsyncKeyState(0x37) & 0x8000) {
 			if (PushFlg == false) {
 				int Num = GetAnimTrack() - 1;
 				if (Num < 0)Num = 0;
-				ChangeAnim(Num);
+				ChangeAnim(Num, m_fShiftTime);
 			}
 		}
-		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
+		if (GetAsyncKeyState(0x38) & 0x8000) {
 			if (PushFlg == false) {
 				int Num = GetAnimTrack() + 1;
 				if ((DWORD)Num > m_pAnimController->GetNumAnimationSets())Num = m_pAnimController->GetNumAnimationSets();
-				ChangeAnim(Num);
+				ChangeAnim(Num, m_fShiftTime);
 			}
 		}
 		PushFlg = true;
@@ -737,6 +741,22 @@ VOID CSkinMesh::Update(D3DXMATRIX _World) {
 	else {
 		PushFlg = false;
 	}
+
+	// モーションブレンド確認
+	m_fCurWeight += m_fShiftTime;
+	if (m_fCurWeight <= 1.0f)
+	{
+		// ブレンド中
+		m_pAnimController->SetTrackWeight(0, m_fCurWeight);			// 現在のアニメーション
+		m_pAnimController->SetTrackWeight(1, 1.0f - m_fCurWeight);	// 前のアニメーション
+	}
+	else
+	{
+		// ブレンド終了。通常アニメーションをするTrack0のウェイトを最大値に固定
+		m_pAnimController->SetTrackWeight(0, 1.0f);					// 現在のアニメーション
+		m_pAnimController->SetTrackEnable(1, false);				// 前のアニメーションを無効にする
+	}
+
 	//マトリックス行列反映
 	m_World = _World;
 	//アニメーション時間を更新
@@ -765,15 +785,41 @@ VOID CSkinMesh::Draw(LPDIRECT3DDEVICE9 lpD3DDevice, PRS prs) {
 // アニメーション変更関数
 //=============================================================================
 //オブジェクトのアニメーション変更( 変更するアニメーション番号 )
-VOID CSkinMesh::ChangeAnim(DWORD _NewAnimNum) {
-	//新規アニメーションに変更
+VOID CSkinMesh::ChangeAnim(DWORD _NewAnimNum, FLOAT fShift)
+{
+	if (m_CurrentTrack == _NewAnimNum)
+	{	// 異なるアニメーションであるかチェック
+		return;
+	}
+
+	// 現在のアニメーションセットの設定値を取得
+	D3DXTRACK_DESC TD;   // トラックの能力
+	m_pAnimController->GetTrackDesc(0, &TD);
+	// 現在のアニメーションをトラック1へ移行
+	m_pAnimController->SetTrackAnimationSet(1, m_pAnimSet[m_CurrentTrack]);
+	m_pAnimController->SetTrackDesc(1, &TD);
+
+
+	// 現在のアニメーションを保管
+	m_OldTrack = m_CurrentTrack;
+	// 新規アニメーションに変更
 	m_CurrentTrack = _NewAnimNum;
+
 	//アニメーションタイムを初期化
 	m_AnimeTime = 0;
-	//アニメーションを最初の位置から再生させる
+	// アニメーションを最初の位置から再生させる
 	m_pAnimController->GetTrackDesc(0, &m_CurrentTrackDesc);
 	m_CurrentTrackDesc.Position = 0;
 	m_pAnimController->SetTrackDesc(0, &m_CurrentTrackDesc);
+
+	// ウェイトタイムを初期化
+	m_fCurWeight = 0.0f;
+	// 次のアニメーションへシフトするのにかかる時間を設定
+	m_fShiftTime = fShift;
+
+	// トラックの合成を許可
+	m_pAnimController->SetTrackEnable(0, true);
+	m_pAnimController->SetTrackEnable(1, true);
 }
 
 //=============================================================================
@@ -837,17 +883,3 @@ D3DXMATRIX* CSkinMesh::GetpBoneMatrix(LPSTR _BoneName) {
 		return NULL;
 	}
 }
-
-//bool CHighLevelAnimController::SetLoopTime(UINT animID, FLOAT time)
-//{
-//	// 指定のアニメーションIDの存在をチェック
-//	if (m_Anim.size() <= animID)
-//		return false;
-//
-//	// トラックスピード調節値を算出
-//	FLOAT DefTime = m_Anim[animID].pAnimSet->GetPeriod();
-//	m_Anim[animID].fLoopTime = time;
-//	m_Anim[animID].fTrackSpeed = DefTime / time;
-//		
-//	return true;
-//}
