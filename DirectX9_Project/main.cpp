@@ -177,19 +177,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 					RECT	lpScreen;
 					GetWindowRect(hWnd, &lpScreen);
 
-					// マウスカーソルの移動範囲を指定
-					lpScreen.left = lpScreen.left + (long)MOUSE_MARGIN;
-					lpScreen.top = lpScreen.bottom - (long)SCREEN_HEIGHT + (long)MOUSE_MARGIN;
-					lpScreen.right = lpScreen.right - (long)MOUSE_MARGIN;
-					lpScreen.bottom = lpScreen.bottom - (long)MOUSE_MARGIN;
-
-					// マウスカーソルの移動制限
-					ClipCursor(&lpScreen);
-
-#ifdef _DEBUG
-					PrintDebugProc("Screen L[%l]  T[%l]  R[%l]  B[%l]\n",	// ウィンドウ座標を表示
-						lpScreen.left, lpScreen.top, lpScreen.right, lpScreen.bottom);
-#endif
 				}
 
 				// 更新処理
