@@ -331,7 +331,9 @@ HRESULT InitializeMobUse(HINSTANCE hInst, HWND hWindow)
 
 	// アクセス権を得る
 	pMobUse->Acquire();
-	ShowCursor(false);
+
+	// カーソルの非表示
+	//ShowCursor(false);
 
 	SetRect(&rectMove, 0, 0, 1280 * SCREEN_SCALE, 720 * SCREEN_SCALE);
 	return result;
@@ -626,9 +628,9 @@ void UpdatePad(void)
 	DIJOYSTATE2		dijs;
 	int				i;
 
-#ifdef _DEBUG
-	PrintDebugProc("【PAD】\n");
-#endif
+//#ifdef _DEBUG
+//	PrintDebugProc("【PAD】\n");
+//#endif
 
 	for (i = 0; i<padCount; i++)
 	{

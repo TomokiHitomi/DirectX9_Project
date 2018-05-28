@@ -33,7 +33,7 @@ HRESULT InitDebugProc(void)
 	HRESULT hr;
 
 	// 情報表示用フォントを設定
-	hr = D3DXCreateFont(pDevice, 30, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
+	hr = D3DXCreateFont(pDevice, 20, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
 					OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &g_pD3DXFont);
 
 	// 情報クリア

@@ -26,7 +26,8 @@ enum
 	COLOR_PALLET_ORANGE,
 	COLOR_PALLET_BLACK,
 	COLOR_PALLET_LIGHTBLUE,
-	COLOR_PALLET_GRAY
+	COLOR_PALLET_GRAY,
+	COLOR_PALLET_MAX
 };
 
 //*****************************************************************************

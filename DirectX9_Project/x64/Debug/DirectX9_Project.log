@@ -1,0 +1,25 @@
+﻿  title.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  SkinMeshX.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  scene.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  result.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  player.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  main.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  light.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  input.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  game.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  debugproc.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  camera.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  calculate.cpp
+c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  コードを生成中...

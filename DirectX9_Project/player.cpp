@@ -58,6 +58,8 @@ HRESULT InitPlayer(int nType)
 	//player->m_CSkinMesh.ChangeAnim((DWORD)ANIME01);
 
 	player->m_CSkinMesh.SetAnimSpeed(SKIN_ANIME_SPEED_PLAYER_ANIME);
+	SetPlayerAnime(0, PLAYER_ANIME_HAND, SKIN_ANIME_WEIGHT_PLAYER_NORMAL);
+
 
 	return S_OK;
 }
@@ -84,12 +86,13 @@ void UpdatePlayer(void)
 
 	CheckActionPlayer();
 
-
 	player->m_CSkinMesh.Update(g_mtxWorldPlayer);
 
 #ifdef _DEBUG
 	PrintDebugProc("Pos[X:%f Y:%f Z:%f]\n", player->prs.pos.x, player->prs.pos.y, player->prs.pos.z);
 	PrintDebugProc("Anime[%d]  AnimeTime[%d]\n", PLAYER_ANIME_MAX - player->m_CSkinMesh.GetAnimTrack() - 1, player->m_CSkinMesh.GetAnimTime());
+	PrintDebugProc("１キー：手を振る\n");
+	PrintDebugProc("２キー：ダンス\n");
 #endif
 }
 
@@ -101,15 +104,7 @@ void DrawPlayer(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	PLAYER *player = GetPlayer(0);
 
-	//SetLight(LIGHT2, TRUE);
-	// ラインティングを無効にする
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
 	player->m_CSkinMesh.Draw(pDevice, player->prs);
-
-	// ラインティングを有効にする
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	//SetLight(LIGHT2, FALSE);
 }
 
 //=============================================================================
@@ -163,6 +158,15 @@ void SetPlayerAnime(int nPlayer,DWORD dwAnime, FLOAT fShift)
 void CheckActionPlayer(void)
 {
 	PLAYER *player = GetPlayer(0);
+	if (GetKeyboardTrigger(DIK_1))
+	{
+		SetPlayerAnime(0, PLAYER_ANIME_HAND, SKIN_ANIME_WEIGHT_PLAYER_NORMAL);
+	}
+	if (GetKeyboardTrigger(DIK_2))
+	{
+		SetPlayerAnime(0, PLAYER_ANIME_DANCE_SPIN, SKIN_ANIME_WEIGHT_PLAYER_NORMAL);
+	}
+
 
 
 	//if (player->bRecoilFlag)

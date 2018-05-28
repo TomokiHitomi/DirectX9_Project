@@ -1,11 +1,3 @@
-﻿  title.cpp
-  scene.cpp
-  result.cpp
-  main.cpp
-c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.cpp(107): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.cpp(258): warning C4244: '=': 'float' から 'UINT' への変換です。データが失われる可能性があります。
-c:\users\hitomi\documents\visual studio 2015\projects\directx9_project\directx9_project\main.cpp(259): warning C4244: '=': 'float' から 'UINT' への変換です。データが失われる可能性があります。
-  game.cpp
-  コードを生成中...
+﻿  player.cpp
   DirectX9_Project.vcxproj -> C:\Users\Hitomi\Documents\Visual Studio 2015\Projects\DirectX9_Project\Debug\DirectX9_Project.exe
   DirectX9_Project.vcxproj -> C:\Users\Hitomi\Documents\Visual Studio 2015\Projects\DirectX9_Project\Debug\DirectX9_Project.pdb (Full PDB)

@@ -32,15 +32,7 @@
 //=============================================================================
 void ResultScene::Update(void)
 {
-	UpdateInput();		// ì¸óÕ
 
-
-	UpdateCamera();		// ÉJÉÅÉâ
-
-#ifdef _DEBUG
-	UpdateDebugProc();
-	PrintDebugProc("ResultScene[Update]\n");
-#endif
 }
 
 //=============================================================================
@@ -48,12 +40,7 @@ void ResultScene::Update(void)
 //=============================================================================
 void ResultScene::Draw(void)
 {
-	SetCamera();		// ÉJÉÅÉâ
 
-#ifdef _DEBUG
-	PrintDebugProc("ResultScene[Draw]\n");
-	DrawDebugProc();
-#endif
 }
 
 //=============================================================================

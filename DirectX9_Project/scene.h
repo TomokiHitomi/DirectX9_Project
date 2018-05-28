@@ -45,6 +45,11 @@ public:
 	static void Draw(void);							// シーンの描画関数
 private:
 	static BaseScene *m_pScene;						//現在のシーン
+	static SCENE		m_nScene;					// 現在のシーン番号
+#ifdef _DEBUG
+	static void DebugScene(void);					// デバッグ用シーン遷移
+#endif
+
 };
 
 //*****************************************************************************

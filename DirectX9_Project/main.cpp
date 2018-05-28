@@ -6,23 +6,8 @@
 //=============================================================================
 #include "main.h"
 
-/* Camera */
-
-/* 2D */
-
-/* 3D */
-
-/* Billnpard */
-
-/* Field */
-
-/* Shadow */
-
-/* Stage */
-
-/* System */
+/* Scene */
 #include "scene.h"
-#include "input.h"
 
 /* Debug */
 #ifdef _DEBUG
@@ -44,15 +29,8 @@ void Draw(void);
 LPDIRECT3D9			g_pD3D = NULL;			// Direct3Dオブジェクト
 LPDIRECT3DDEVICE9	g_pD3DDevice = NULL;	// デバイスオブジェクト(描画に必要)
 
-E_STAGE				g_eStage = START_STAGE;	// ステージ
-int					g_nTotalCount = 0;		// トータルカウンタ
-int					g_nGameCount = 0;		// トータルカウンタ
 int					g_nCountFPS = 0;		// FPSカウンタ
-int					g_nGameOver = 0;
 bool				g_bEndFlag = true;		// 終了フラグ
-
-//float g_fFogDensity = 0.8f;
-//D3DXCOLOR g_xFogColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 SceneManager g_cScene;
 
@@ -78,13 +56,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		0,													// 補助メモリ
 		hInstance,											// インスタンスハンドル
 		NULL,
-		//LoadIcon(hInstance , MAKEINTRESOURCE(IDI_ICON1)),	// アイコン画像
 		LoadCursor(NULL, IDC_ARROW),						// カーソル画像
 		(HBRUSH)(COLOR_WINDOW + 1),							// 背景色
 		NULL,												// メニュー名
 		CLASS_NAME,											// クラス名
 		NULL,
-		//LoadIcon(hInstance , MAKEINTRESOURCE(IDI_ICON2))	// アイコン16x16
 	};
 	HWND hWnd;
 	MSG msg;
@@ -165,7 +141,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			if((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{
 #ifdef _DEBUG
-				PrintDebugProc("FPS:%d  TotalCount:%u", g_nCountFPS, g_nTotalCount);
+				PrintDebugProc("FPS:%d  ", g_nCountFPS);
 #endif
 
 				dwExecLastTime = dwCurrentTime;
@@ -177,6 +153,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 					RECT	lpScreen;
 					GetWindowRect(hWnd, &lpScreen);
 
+					// マウスカーソルの移動制限
+					ClipCursor(&lpScreen);
 				}
 
 				// 更新処理
@@ -186,7 +164,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				Draw();
 
 				dwFrameCount++;
-				g_nTotalCount++;
 			}
 		}
 	}
@@ -215,14 +192,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 
-	//case WM_KEYDOWN:
-	//	switch(wParam)
-	//	{
-	//	case VK_ESCAPE:
-			//DestroyWindow(hWnd);
-	//		break;
-	//	}
-	//	break;
+	case WM_KEYDOWN:
+		switch(wParam)
+		{
+		case VK_ESCAPE:
+			DestroyWindow(hWnd);
+			break;
+		}
+		break;
 
 	default:
 		break;
@@ -354,19 +331,6 @@ void Uninit(void)
 //=============================================================================
 void Update(void)
 {
-	if (GetKeyboardTrigger(DIK_1))
-	{
-		g_cScene.ChangeScene(g_cScene.TITLE);
-	}
-	if (GetKeyboardTrigger(DIK_2))
-	{
-		g_cScene.ChangeScene(g_cScene.GAME);
-	}
-	if (GetKeyboardTrigger(DIK_3))
-	{
-		g_cScene.ChangeScene(g_cScene.RESULT);
-	}
-
 	// 更新処理
 	g_cScene.Update();
 }
@@ -399,13 +363,4 @@ void Draw(void)
 LPDIRECT3DDEVICE9 GetDevice(void)
 {
 	return g_pD3DDevice;
-}
-
-
-//=============================================================================
-// トータルカウント取得関数
-//=============================================================================
-int *GetTotalCount(void)
-{
-	return(&g_nTotalCount);
 }

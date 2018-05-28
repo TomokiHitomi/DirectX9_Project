@@ -112,21 +112,21 @@ HRESULT MY_HIERARCHY::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA* pMesh
 	iFacesAmount = pMesh->GetNumFaces();
 
 
-	// メッシュに法線がないので法線を追加
-	pMeshContainer->MeshData.Type = D3DXMESHTYPE_MESH;
-	// 柔軟な頂点フォーマット (FVF) コードを使ってメッシュのコピーを作成する
-	hr = pMesh->CloneMeshFVF(
-		pMesh->GetOptions(),
-		pMesh->GetFVF() | D3DFVF_NORMAL,
-		pDevice,
-		&pMeshContainer->MeshData.pMesh); // ←ここにコピー
-	if (FAILED(hr))
-	{
-		return E_FAIL;
-	}
-	pMesh = pMeshContainer->MeshData.pMesh;
-	// メッシュに含まれる各頂点の法線を計算して、設定する
-	D3DXComputeNormals(pMesh, NULL);
+	//// メッシュに法線がないので法線を追加
+	//pMeshContainer->MeshData.Type = D3DXMESHTYPE_MESH;
+	//// 柔軟な頂点フォーマット (FVF) コードを使ってメッシュのコピーを作成する
+	//hr = pMesh->CloneMeshFVF(
+	//	pMesh->GetOptions(),
+	//	pMesh->GetFVF() | D3DFVF_NORMAL,
+	//	pDevice,
+	//	&pMeshContainer->MeshData.pMesh); // ←ここにコピー
+	//if (FAILED(hr))
+	//{
+	//	return E_FAIL;
+	//}
+	//pMesh = pMeshContainer->MeshData.pMesh;
+	//// メッシュに含まれる各頂点の法線を計算して、設定する
+	//D3DXComputeNormals(pMesh, NULL);
 
 
 	//// 法線の確認
@@ -186,21 +186,21 @@ HRESULT MY_HIERARCHY::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA* pMesh
 			if (pMeshContainer->pMaterials[iMaterial].pTextureFilename != NULL)
 			{
 				//////マテリアルカラーを0.5に設定
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse.r = 1.0f;
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse.g = 1.0f;
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse.b = 1.0f;
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse.a = 1.0f;
+				pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse.r = 1.0f;
+				pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse.g = 1.0f;
+				pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse.b = 1.0f;
+				pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse.a = 1.0f;
 
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive.r = 0.5f;
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive.g = 0.5f;
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive.b = 0.5f;
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive.a = 0.5f;
-
+				//pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive.r = 0.1f;
+				//pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive.g = 0.1f;
+				//pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive.b = 0.1f;
+				//pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive.a = 1.0f;
 
 				////スペキュラも0.5に設定(上で設定したマテリアルカラーの0.5の設定をコピー)
-				////pMeshContainer->pMaterials[iMaterial].MatD3D.Specular = pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse;
+				pMeshContainer->pMaterials[iMaterial].MatD3D.Specular = pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse;
 				////pMeshContainer->pMaterials[iMaterial].MatD3D.Emissive = pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse;
-				//pMeshContainer->pMaterials[iMaterial].MatD3D.Ambient = pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse;
+				pMeshContainer->pMaterials[iMaterial].MatD3D.Ambient = pMeshContainer->pMaterials[iMaterial].MatD3D.Diffuse;
+				pMeshContainer->pMaterials[iMaterial].MatD3D.Power = 50.0f;
 
 				//テクスチャのファイルパス保存用変数
 				TCHAR strTexturePath[MAX_PATH];

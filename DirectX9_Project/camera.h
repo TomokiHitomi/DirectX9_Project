@@ -15,19 +15,21 @@
 #define CAMERA_MAX				(1)
 #define CAMERA_ANGLE_MARGIN		(0.1f)
 
-#define CAMERA_MOVE_SPEED		(7)
+#define CAMERA_MOVE_SPEED		(1)
 #define CAMERA_MOVE_SLANT		(CAMERA_MOVE_SPEED * 0.71f)
-#define CAMERA_ROT_SPEED		(0.05f)
+#define CAMERA_ROT_SPEED		(0.02f)
 #define CAMERA_ROT_SLANT		(CAMERA_ROT_SPEED * 0.71f)
 #define CAMERA_ROT_SPEED_AUTO	(0.2f)
 
 
 #define CAMERA_V_ANGLE			(D3DX_PI)
-#define CAMERA_H_ANGLE			(D3DX_PI * 0.5f)
+#define CAMERA_H_ANGLE			(D3DX_PI * 1.5f)
 
 #define CAMERA_H_ANGLE_MARGIN	(D3DX_PI / 180 * 45)
 #define CAMERA_MARGIN_SPEED		(D3DX_PI / 180)
 #define CAMERA_LENGTH_SPEED			(0.1f)
+#define CAMERA_LENGTH_MIN			(10.0f)
+#define CAMERA_LENGTH_MAX			(500.0f)
 #define CAMERA_LENGTH_AUTO_SPEED	(30.0f)
 
 #define CAMERA_ROT_MOUSE_X			(0.002f)
@@ -37,9 +39,9 @@
 
 #define ROOT_2					(1.414213f)
 
-#define	POS_X_CAM				(-1000.0f)										// カメラの初期位置(X座標)
-#define	POS_Y_CAM				(500.0f)										// カメラの初期位置(Y座標)
-#define	POS_Z_CAM				(0.0f)										// カメラの初期位置(Z座標)
+#define	POS_X_CAM				(0.0f)										// カメラの初期位置(X座標)
+#define	POS_Y_CAM				(25.0f)										// カメラの初期位置(Y座標)
+#define	POS_Z_CAM				(100.0f)										// カメラの初期位置(Z座標)
 
 #define	VIEW_ANGLE				(D3DXToRadian(35.0f))							// ビュー平面の視野角
 #define	VIEW_ASPECT				((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	
@@ -51,7 +53,7 @@
 #define CAMERA_GAME_LENGTH						(30.0f)
 #define CAMERA_GAME_HEIGHT						(25.0f)
 
-#define CAMERA_LENGTH_GAME_NORMAL				(150.0f)
+#define CAMERA_LENGTH_GAME_NORMAL				(100.0f)
 #define CAMERA_LENGTH_GAME_TPS					(150.0f)
 #define CAMERA_LENGTH_GAME_MIN					(50.0f)
 #define CAMERA_LENGTH_GAME_MAX					(500.0f)

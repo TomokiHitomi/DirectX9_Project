@@ -1,18 +1,22 @@
 //=============================================================================
 //
-// シーン処理 [title.cpp]
+// シーン処理 [scene.cpp]
 // Author : GP12A295 25 人見友基
 //
 //=============================================================================
 #include "scene.h"
+
+/* Scene */
 #include "title.h"
 #include "game.h"
 #include "result.h"
 
-/* 全体で使うインクルード */
+/* System */
 #include "camera.h"
 #include "light.h"
 #include "input.h"
+#include "fade.h"
+//#include "sound.h"
 
 /* デバッグ */
 #ifdef _DEBUG
@@ -32,6 +36,7 @@
 //*****************************************************************************
 //始めはシーンを空にしておく
 BaseScene *SceneManager::m_pScene = NULL;
+SceneManager::SCENE SceneManager::m_nScene;
 
 //=============================================================================
 // シーン管理処理
@@ -46,17 +51,19 @@ void SceneManager::ChangeScene(SCENE scene)
 	switch (scene)
 	{	//引数のシーン
 	case SCENE::TITLE:
-		m_pScene = new TitleScene();	//タイトルシーンを現在のシーンにする
+		m_pScene = new TitleScene();	// タイトルシーンを現在のシーンにする
 		break;
 	case SCENE::GAME:
-		m_pScene = new GameScene();		//ゲームシーンを現在のシーンにする
+		m_pScene = new GameScene();		// ゲームシーンを現在のシーンにする
 		break;
 	case SCENE::RESULT:
-		m_pScene = new ResultScene();	//リザルトシーンを現在のシーンにする
+		m_pScene = new ResultScene();	// リザルトシーンを現在のシーンにする
 		break;
 	default:
 		break;
 	}
+
+	m_nScene = scene;
 }
 
 //=============================================================================
@@ -64,17 +71,16 @@ void SceneManager::ChangeScene(SCENE scene)
 //=============================================================================
 void SceneManager::Init(HINSTANCE hInst, HWND hWnd)
 {
-	ChangeScene(TITLE);			// 初期シーン設定
-	InitLight();				// ライト
-
-	InitInput(hInst, hWnd);		// 入力
-	InitCamera();				// カメラ
-
-	//InitSound(hWnd);			// サウンド
-	//InitFade();					// フェード
+	m_nScene = GAME;		// 初期シーン番号を設定
+	ChangeScene(m_nScene);	// 初期シーン設定
+	InitLight();			// ライト
+	InitInput(hInst, hWnd);	// 入力
+	//InitSound(hWnd);		// サウンド
+	InitCamera();			// カメラ
+	InitFade();				// フェード
 
 #ifdef _DEBUG
-	InitDebugProc();			// デバッグ
+	InitDebugProc();		// デバッグ
 #endif
 }
 
@@ -85,9 +91,8 @@ void SceneManager::Uninit()
 {
 	UninitInput();			// 入力
 	UninitCamera();			// カメラ
-
 	//UninitSound();			// サウンド
-	//UninitFade();			// フェード
+	UninitFade();			// フェード
 
 #ifdef _DEBUG
 	UninitDebugProc();		// デバッグ
@@ -99,7 +104,17 @@ void SceneManager::Uninit()
 //=============================================================================
 void SceneManager::Update()
 {
-	m_pScene->Update();		//現在のシーンの更新関数
+	UpdateInput();			// 入力
+	UpdateFade();			// フェード
+
+#ifdef _DEBUG
+	DebugScene();			// デバッグ用
+#endif
+	UpdateCamera();			// カメラ
+
+	m_pScene->Update();		// 現在のシーンの更新関数
+
+	//UpdateSound();			// サウンド
 }
 
 //=============================================================================
@@ -107,7 +122,15 @@ void SceneManager::Update()
 //=============================================================================
 void SceneManager::Draw()
 {
-	m_pScene->Draw();		//現在のシーンの描画関数
+	SetCamera();			// カメラ
+
+	m_pScene->Draw();		// 現在のシーンの描画関数
+
+	DrawFade();				// フェード
+
+#ifdef _DEBUG
+	DrawDebugProc();
+#endif
 }
 
 //=============================================================================
@@ -125,3 +148,31 @@ SceneManager::~SceneManager(void)
 {
 
 }
+
+#ifdef _DEBUG
+//=============================================================================
+// デバッグ処理
+//=============================================================================
+void SceneManager::DebugScene(void)
+{
+	UpdateDebugProc();
+
+	PrintDebugProc("【 SCENE 】\n");
+	switch (m_nScene)
+	{
+	case SCENE::TITLE:
+		PrintDebugProc("Scene[TITLE]\n");
+		break;
+	case SCENE::GAME:
+		PrintDebugProc("Scene[GAME]\n");
+		break;
+	case SCENE::RESULT:
+		PrintDebugProc("Scene[RESULT]\n");
+		break;
+	}
+
+	PrintDebugProc("\n");
+
+	UpdateDebugLight();
+}
+#endif

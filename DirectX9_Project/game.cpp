@@ -6,12 +6,9 @@
 //=============================================================================
 #include "game.h"
 
-/* 全体で必要なインクルード*/
-#include "input.h"
-#include "camera.h"
-
 /* ゲームで必要なインクルード */
 #include "player.h"
+#include "cube.h"
 
 /* デバッグ */
 #ifdef _DEBUG
@@ -35,16 +32,8 @@
 //=============================================================================
 void GameScene::Update(void)
 {
-	UpdateInput();		// 入力
-
 	UpdatePlayer();		// プレイヤー
-
-	UpdateCamera();		// カメラ
-
-#ifdef _DEBUG
-	UpdateDebugProc();
-	PrintDebugProc("GameScene[Update]\n");
-#endif
+	UpdateCube();		// キューブ
 }
 
 //=============================================================================
@@ -52,14 +41,8 @@ void GameScene::Update(void)
 //=============================================================================
 void GameScene::Draw(void)
 {
-	SetCamera();		// カメラ
-
 	DrawPlayer();		// プレイヤー
-
-#ifdef _DEBUG
-	PrintDebugProc("GameScene[Draw]\n");
-	DrawDebugProc();
-#endif
+	DrawCube();			// キューブ
 }
 
 //=============================================================================
@@ -67,7 +50,8 @@ void GameScene::Draw(void)
 //=============================================================================
 GameScene::GameScene(void)
 {
-	InitPlayer(0);
+	InitPlayer(0);		// プレイヤー
+	InitCube(0);		// キューブ
 }
 
 //=============================================================================
@@ -75,5 +59,6 @@ GameScene::GameScene(void)
 //=============================================================================
 GameScene::~GameScene(void)
 {
-	UninitPlayer();
+	UninitPlayer();		// プレイヤー
+	UninitCube();		// キューブ
 }

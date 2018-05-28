@@ -47,7 +47,7 @@
 
 #define DEBUG_RECT		(50)	// デバッグ
 
-#define MOUSE_MARGIN	(10)
+#define MOUSE_MARGIN	(0)
 
 // ３Ｄポリゴン頂点フォーマット
 #define FVF_VERTEX_3D (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)

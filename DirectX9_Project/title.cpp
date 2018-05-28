@@ -32,15 +32,7 @@
 //=============================================================================
 void TitleScene::Update(void)
 {
-	UpdateInput();		// ì¸óÕ
 
-
-	UpdateCamera();		// ÉJÉÅÉâ
-
-#ifdef _DEBUG
-	UpdateDebugProc();
-	PrintDebugProc("TitleScene[Update]\n");
-#endif
 }
 
 //=============================================================================
@@ -48,12 +40,7 @@ void TitleScene::Update(void)
 //=============================================================================
 void TitleScene::Draw(void)
 {
-	SetCamera();		// ÉJÉÅÉâ
 
-#ifdef _DEBUG
-	PrintDebugProc("TitleScene[Draw]\n");
-	DrawDebugProc();
-#endif
 }
 
 //=============================================================================
