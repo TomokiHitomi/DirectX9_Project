@@ -32,8 +32,7 @@
 // マクロ定義
 //*****************************************************************************
 #define CLASS_NAME		("AppClass")						// ウインドウのクラス名
-#define WINDOW_NAME		("DirectX 3D作品「SymphonicCloud」")// ウインドウのキャプション名
-#define ICON16			("data/ICON/icon16.ico")			// アイコン用画像 16x16
+#define WINDOW_NAME		("DirectX9 LightTest")// ウインドウのキャプション名
 #define SCREEN_SCALE	(1.0f)
 
 #define SCREEN_WIDTH	(1280 * SCREEN_SCALE)	// ウインドウの幅

@@ -13,5 +13,5 @@
 # 特定のディレクトリを無視する場合は先頭と末尾に/を付ける
 /Debug/
 /Release/
-/20180420_Bouldering/Debug/
-/20180420_Bouldering/Release/
+/DirectX9_Project/Debug/
+/DirectX9_Project/Release/
