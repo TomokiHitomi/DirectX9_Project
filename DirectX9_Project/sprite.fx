@@ -40,7 +40,7 @@ VS_OUT vs_main( VS_IN In )
 	float4x4 mat;
 
 	mat = mul(mul(world, view), proj);
-	Out.pos = mul( float4(In.pos, 1.0f), mat );
+	Out.pos = mul( float4(In.pos, 100.0f), mat );
 	Out.uv  = In.uv;
 	Out.col = In.col;
 	return Out;

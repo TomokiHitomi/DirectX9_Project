@@ -105,6 +105,7 @@ void InitStatusEffect(LPDIRECT3DDEVICE9 pDevice, int nEffect)
 	effect->nTex = 0;
 	effect->fSizeChange = 0.0f;
 	effect->fAlphaChange = 0.0f;
+	effect->fSize = 1.0f;
 }
 
 //=============================================================================
@@ -133,6 +134,12 @@ void UninitEffect(void)
 //=============================================================================
 void UpdateEffect(void)
 {
+#ifdef _DEBUG
+	PrintDebugProc("【 EFFECT 】\n");
+	int nEffectCount = 0;
+	DWORD  start = GetTickCount();
+	static double s_dClockTime;
+#endif
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	EFFECT *effect = &effectWk[0];
 	CAMERA *camera = GetCamera(0);
@@ -141,17 +148,55 @@ void UpdateEffect(void)
 	if (GetKeyboardPress(DIK_SPACE))
 	{
 		SetEffect(0,
-			D3DXVECTOR2(25, 25),
-			SetColorPallet(COLOR_PALLET_MAGENTA),
-			camera->posCameraAt,
-			0.0001f,
-			0.0001f);
-	}
+			D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_RED),
+			camera->posCameraAt + D3DXVECTOR3(0.0f,10.0f,0.0f),
+			0.0001f,0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_YELLOW),
+			camera->posCameraAt + D3DXVECTOR3(10.0f, 0.0f, 0.0f),
+			0.0001f,0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_MAGENTA),
+			camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, 10.0f),
+			0.0001f,0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_CYAN),
+			camera->posCameraAt + D3DXVECTOR3(-10.0f, 0.0f, 0.0f),
+			0.0001f,0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_GREEN),
+			camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, -10.0f),
+			0.0001f,0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_BLUE),
+			camera->posCameraAt + D3DXVECTOR3(0.0f, -10.0f, 0.0f),
+			0.0001f,0.0001f);
 
-#ifdef _DEBUG
-	PrintDebugProc("【 EFFECT 】\n");
-	int nEffectCount = 0;
-#endif
+		SetEffect(0,
+			D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_RED),
+			camera->posCameraAt + D3DXVECTOR3(0.0f, 20.0f, 0.0f),
+			0.0001f, 0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_YELLOW),
+			camera->posCameraAt + D3DXVECTOR3(20.0f, 0.0f, 0.0f),
+			0.0001f, 0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_MAGENTA),
+			camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, 20.0f),
+			0.0001f, 0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_CYAN),
+			camera->posCameraAt + D3DXVECTOR3(-20.0f, 0.0f, 0.0f),
+			0.0001f, 0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_GREEN),
+			camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, -20.0f),
+			0.0001f, 0.0001f);
+		SetEffect(0,
+			D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_BLUE),
+			camera->posCameraAt + D3DXVECTOR3(0.0f, -20.0f, 0.0f),
+			0.0001f, 0.0001f);
+	}
 
 	for (int i = 0; i < EFFECT_MAX; i++, effect++)
 	{
@@ -161,24 +206,38 @@ void UpdateEffect(void)
 			// 使用エフェクト数をカウント
 			nEffectCount++;
 #endif
-			effect->vec2Size.x -= effect->fSizeChange;
-			effect->vec2Size.y -= effect->fSizeChange;
-			effect->colorEffect.a -= effect->fAlphaChange;
+			//effect->fSize += 0.5f;
+			//if (effect->fSize > 100.0f)
+			//{
+			//	InitStatusEffect(pDevice, i);
+			//}
+			//effect->vec2Size.x -= effect->fSizeChange;
+			//effect->vec2Size.y -= effect->fSizeChange;
+			//effect->colorEffect.a -= effect->fAlphaChange;
 
-			SetVtxEffect(i, effect->vec2Size.x, effect->vec2Size.y);
-			SetDiffuseEffect(i, effect->colorEffect);
-			SetTexEffect(i, effect->nTex);
+			//SetVtxEffect(i, effect->vec2Size.x, effect->vec2Size.y);
+			//SetDiffuseEffect(i, effect->colorEffect);
+			//SetTexEffect(i, effect->nTex);
 
-			if (effect->vec2Size.x < 0 || effect->colorEffect.a < 0)
-			{
-				InitStatusEffect(pDevice, i);
-			}
+			//if (effect->vec2Size.x < 0 || effect->colorEffect.a < 0)
+			//{
+			//	InitStatusEffect(pDevice, i);
+			//}
 		}
 	}
 
 #ifdef _DEBUG
 	PrintDebugProc("EffectMax:%d\n", nEffectCount);
+	DWORD end = GetTickCount();
+	double dClockTemp = (double)(end - start) / 1000;
+
+	if (dClockTemp > s_dClockTime)
+	{
+		s_dClockTime = dClockTemp;
+	}
+	PrintDebugProc("clockTime[%f]\n", s_dClockTime);
 	PrintDebugProc("\n");
+
 #endif
 }
 
@@ -187,6 +246,11 @@ void UpdateEffect(void)
 //=============================================================================
 void DrawEffect(void)
 {
+#ifdef _DEBUG
+	PrintDebugProc("【 EFFECT DRAW 】\n");
+	DWORD  start = GetTickCount();
+	static double s_dClockTime;
+#endif
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	D3DXMATRIX mtxScl, mtxRot, mtxTranslate;	// スケール, 回転, 平行移動
 
@@ -215,6 +279,9 @@ void DrawEffect(void)
 	effectshader->SetTexture("tex", g_pD3DTextureEffect);
 	// シェーダーの開始、numPassには指定してあるテクニックに定義してあるpassの数が変える
 	effectshader->Begin(&numPassEffect, 0);
+	// 頂点バッファをデバイスのデータストリームにバインド
+	pDevice->SetStreamSource(0, g_pD3DVtxBuffEffect, 0, sizeof(VERTEX_3D));
+
 
 	for (int i = 0; i < EFFECT_MAX; i++, effect++)
 	{
@@ -253,8 +320,8 @@ void DrawEffect(void)
 			//pDevice->SetTransform(D3DTS_WORLD, &g_mtxWorldEffect);
 
 			/******************** ビューポート変換 ********************/
-			// 頂点バッファをデバイスのデータストリームにバインド
-			pDevice->SetStreamSource(0, g_pD3DVtxBuffEffect, 0, sizeof(VERTEX_3D));
+			//// 頂点バッファをデバイスのデータストリームにバインド
+			//pDevice->SetStreamSource(0, g_pD3DVtxBuffEffect, 0, sizeof(VERTEX_3D));
 
 			// 頂点フォーマットの設定
 			pDevice->SetFVF(FVF_VERTEX_3D);
@@ -263,10 +330,9 @@ void DrawEffect(void)
 			effectshader->SetMatrix("proj", &mtxProjection);
 			effectshader->SetMatrix("view", &mtxView);
 			effectshader->SetMatrix("world", &g_mtxWorldEffect);
-
+			//effectshader->SetFloat("w", effect->fSize);
 			//// テクスチャの設定
 			//pDevice->SetTexture(0, g_pD3DTextureEffect);
-
 
 			// パスを指定して開始
 			effectshader->BeginPass(0);
@@ -293,6 +359,18 @@ void DrawEffect(void)
 
 	// ラインティングを有効にする
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+#ifdef _DEBUG
+	DWORD end = GetTickCount();
+	double dClockTemp = (double)(end - start) / 1000;
+	
+	if (dClockTemp > s_dClockTime)
+	{
+		s_dClockTime = dClockTemp;
+	}
+	PrintDebugProc("clockTime[%f]\n", s_dClockTime);
+	PrintDebugProc("\n");
+#endif
 }
 
 //=============================================================================

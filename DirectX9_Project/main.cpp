@@ -23,6 +23,11 @@ void Uninit(void);
 void Update(void);
 void Draw(void);
 
+#ifdef _DEBUG
+void CreateConsoleWindow(void);
+void CloseConsoleWindow(void);
+#endif
+
 //*****************************************************************************
 // グローバル変数:
 //*****************************************************************************
@@ -34,11 +39,18 @@ bool				g_bEndFlag = true;		// 終了フラグ
 
 SceneManager g_cScene;
 
+#ifdef _DEBUG
+int hConsole;
+#endif
+
 //=============================================================================
 // メイン関数
 //=============================================================================
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+#ifdef _DEBUG
+	CreateConsoleWindow();
+#endif
 	UNREFERENCED_PARAMETER(hPrevInstance);	// 無くても良いけど、警告が出る（未使用宣言）
 	UNREFERENCED_PARAMETER(lpCmdLine);		// 無くても良いけど、警告が出る（未使用宣言）
 
@@ -109,7 +121,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
-
 	// メッセージループ
 	while(g_bEndFlag)
 	{
@@ -177,6 +188,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	Uninit();
 
 	timeEndPeriod(1);				// 分解能を戻す
+
+//#ifdef _DEBUG
+//	CloseConsoleWindow();
+//#endif
 
 	return (int)msg.wParam;
 }
@@ -364,3 +379,25 @@ LPDIRECT3DDEVICE9 GetDevice(void)
 {
 	return g_pD3DDevice;
 }
+
+#ifdef _DEBUG
+//=============================================================================
+// コンソールウィンドウの初期化関数
+//=============================================================================
+void CreateConsoleWindow(void)
+{
+	hConsole = 0;
+	AllocConsole();
+	hConsole = _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
+	*stdout = *_fdopen(hConsole, "w");
+	setvbuf(stdout, NULL, _IONBF, 0);
+}
+
+//=============================================================================
+// コンソールウィンドウの終了関数
+//=============================================================================
+void CloseConsoleWindow(void)
+{
+	_close(hConsole);
+}
+#endif

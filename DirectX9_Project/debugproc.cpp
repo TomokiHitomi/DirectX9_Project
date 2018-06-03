@@ -137,7 +137,7 @@ void PrintDebugProc(char *fmt,...)
 
 			case 'f':
 				// 可変引数にアクセスしてその変数を取り出す処理
-				sprintf(aWk, "%.3f", va_arg(list, double));		// double型で指定
+				sprintf(aWk, "%.6f", va_arg(list, double));		// double型で指定
 				break;
 
 			case 'l':

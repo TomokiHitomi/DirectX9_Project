@@ -15,6 +15,13 @@
 #include <stdio.h>
 #include <time.h>
 #include <vector>
+#include <iostream>
+
+#ifdef _DEBUG
+// デバッグコンソール用
+#include <io.h>
+#include <Fcntl.h>
+#endif
 
 #define DIRECTINPUT_VERSION (0x0800)	// 警告対処用
 #include "dinput.h"

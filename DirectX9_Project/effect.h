@@ -33,7 +33,7 @@
 #define EFFECT_ALPHA_CHANGE	(0.04f)
 
 // 最大数
-#define EFFECT_MAX			(10000)
+#define EFFECT_MAX			(100000)
 
 // RGBA
 #define EFFECT_DIF_R		(0.8f)
@@ -57,6 +57,7 @@ typedef struct
 
 	float					fSizeChange;
 	float					fAlphaChange;
+	FLOAT					fSize;
 
 	bool					bUse;					// 使用フラグ
 }EFFECT;
