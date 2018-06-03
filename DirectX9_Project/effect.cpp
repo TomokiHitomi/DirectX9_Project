@@ -280,7 +280,7 @@ void DrawEffect(void)
 	// シェーダーの開始、numPassには指定してあるテクニックに定義してあるpassの数が変える
 	effectshader->Begin(&numPassEffect, 0);
 	// 頂点バッファをデバイスのデータストリームにバインド
-	pDevice->SetStreamSource(0, g_pD3DVtxBuffEffect, 0, sizeof(VERTEX_3D));
+	pDevice->SetStreamSource(0, g_pD3DVtxBuffEffect, 0, sizeof(VERTEX_NOLIGHT));
 
 
 	for (int i = 0; i < EFFECT_MAX; i++, effect++)
@@ -324,7 +324,7 @@ void DrawEffect(void)
 			//pDevice->SetStreamSource(0, g_pD3DVtxBuffEffect, 0, sizeof(VERTEX_3D));
 
 			// 頂点フォーマットの設定
-			pDevice->SetFVF(FVF_VERTEX_3D);
+			pDevice->SetFVF(FVF_VERTEX_NOLIGHT);
 
 			// 必要なグローバル情報を与える
 			effectshader->SetMatrix("proj", &mtxProjection);
@@ -336,7 +336,6 @@ void DrawEffect(void)
 
 			// パスを指定して開始
 			effectshader->BeginPass(0);
-
 
 			// ポリゴンの描画
 			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, (i * 4), NUM_POLYGON);
@@ -379,7 +378,7 @@ void DrawEffect(void)
 HRESULT MakeVertexEffect(LPDIRECT3DDEVICE9 pDevice)
 {
 	// オブジェクトの頂点バッファを生成
-	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * NUM_VERTEX * EFFECT_MAX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_NOLIGHT) * NUM_VERTEX * EFFECT_MAX,	// 頂点データ用に確保するバッファサイズ(バイト単位)
 		D3DUSAGE_WRITEONLY,			// 頂点バッファの使用法　
 		FVF_VERTEX_3D,				// 使用する頂点フォーマット
 		D3DPOOL_MANAGED,			// リソースのバッファを保持するメモリクラスを指定
@@ -390,7 +389,7 @@ HRESULT MakeVertexEffect(LPDIRECT3DDEVICE9 pDevice)
 	}
 
 	{//頂点バッファの中身を埋める
-		VERTEX_3D *pVtx;
+		VERTEX_NOLIGHT *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
 		g_pD3DVtxBuffEffect->Lock(0, 0, (void**)&pVtx, 0);
@@ -402,12 +401,6 @@ HRESULT MakeVertexEffect(LPDIRECT3DDEVICE9 pDevice)
 			pVtx[1].vtx = D3DXVECTOR3(EFFECT_SIZE_X, EFFECT_SIZE_Y, 0.0f);
 			pVtx[2].vtx = D3DXVECTOR3(-EFFECT_SIZE_X, -EFFECT_SIZE_Y, 0.0f);
 			pVtx[3].vtx = D3DXVECTOR3(EFFECT_SIZE_X, -EFFECT_SIZE_Y, 0.0f);
-
-			// 法線ベクトルの設定
-			pVtx[0].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-			pVtx[1].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-			pVtx[2].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-			pVtx[3].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 
 			// 反射光の設定
 			pVtx[0].diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -438,7 +431,7 @@ HRESULT MakeVertexEffect(LPDIRECT3DDEVICE9 pDevice)
 void SetVtxEffect(int nWk, float fSizeX, float fSizeY)
 {
 	{// 頂点バッファの中身を埋める
-		VERTEX_3D *pVtx;
+		VERTEX_NOLIGHT *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
 		g_pD3DVtxBuffEffect->Lock(0, 0, (void**)&pVtx, 0);
@@ -462,7 +455,7 @@ void SetVtxEffect(int nWk, float fSizeX, float fSizeY)
 void SetDiffuseEffect(int nWk, D3DXCOLOR col)
 {
 	{// 頂点バッファの中身を埋める
-		VERTEX_3D *pVtx;
+		VERTEX_NOLIGHT *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
 		g_pD3DVtxBuffEffect->Lock(0, 0, (void**)&pVtx, 0);
@@ -486,7 +479,7 @@ void SetDiffuseEffect(int nWk, D3DXCOLOR col)
 void SetTexEffect(int nWk, int nTex)
 {
 	{// 頂点バッファの中身を埋める
-		VERTEX_3D *pVtx;
+		VERTEX_NOLIGHT *pVtx;
 
 		// 頂点データの範囲をロックし、頂点バッファへのポインタを取得
 		g_pD3DVtxBuffEffect->Lock(0, 0, (void**)&pVtx, 0);
