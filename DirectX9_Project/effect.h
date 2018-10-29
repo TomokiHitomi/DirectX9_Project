@@ -26,20 +26,23 @@
 #define	EFFECT_ALPHA		(30)
 
 // サイズ
-#define	EFFECT_SIZE_X		(10.0f)
-#define	EFFECT_SIZE_Y		(10.0f)
+#define	EFFECT_SIZE_X		(1.0f)
+#define	EFFECT_SIZE_Y		(1.0f)
 
 #define EFFECT_SIZE_CHANGE	(0.2f)
 #define EFFECT_ALPHA_CHANGE	(0.04f)
 
 // 最大数
-#define EFFECT_MAX			(100000)
+#define EFFECT_MAX			(200000)
 
 // RGBA
 #define EFFECT_DIF_R		(0.8f)
 #define EFFECT_DIF_G		(0.8f)
 #define EFFECT_DIF_B		(0.0f)
 #define EFFECT_DIF_A		(1.0f)
+
+#define EFFECT_MOVE_SPEED	(0.1f)
+#define EFFECT_SET			(50)
 
 
 typedef struct
@@ -62,6 +65,19 @@ typedef struct
 	bool					bUse;					// 使用フラグ
 }EFFECT;
 
+typedef struct
+{
+	D3DXVECTOR4 vtx;
+	D3DXVECTOR2 tex;
+}VERTEX_PLANE;
+
+typedef struct
+{
+	D3DXVECTOR3 pos;
+	D3DCOLOR	diffuse;
+	D3DXVECTOR3 vec;
+	float		move;
+}INSTANCING_PLANE;
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************

@@ -33,6 +33,7 @@ enum
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
+D3DXVECTOR3 RandVector(void);
 float DotProduct(D3DXVECTOR3 *vl, D3DXVECTOR3 *vr);
 D3DXVECTOR3 *CrossProduct(D3DXVECTOR3 *ret, D3DXVECTOR3 *vl, D3DXVECTOR3 *vr);
 float PreventionAtan2XZ(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2);
@@ -41,6 +42,7 @@ float PiCalculate180(float fAngle);
 float PiCalculate360(float fAngle);
 void QuaternionCalculate(D3DXVECTOR3 *pInit, D3DXVECTOR3 *pC, float Rad, D3DXVECTOR3 *ret);
 D3DXCOLOR SetColorPallet(int nColor);
+D3DXCOLOR SetColorPalletRandom(void);
 void SetShuffle(int *nShuffle, int nSize);
 
 #endif

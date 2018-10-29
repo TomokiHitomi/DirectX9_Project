@@ -23,7 +23,7 @@
 
 
 #define CAMERA_V_ANGLE			(D3DX_PI)
-#define CAMERA_H_ANGLE			(D3DX_PI * 1.5f)
+#define CAMERA_H_ANGLE			(D3DX_PI * 0.5f)
 
 #define CAMERA_H_ANGLE_MARGIN	(D3DX_PI / 180 * 45)
 #define CAMERA_MARGIN_SPEED		(D3DX_PI / 180)
@@ -41,7 +41,7 @@
 
 #define	POS_X_CAM				(0.0f)										// カメラの初期位置(X座標)
 #define	POS_Y_CAM				(25.0f)										// カメラの初期位置(Y座標)
-#define	POS_Z_CAM				(100.0f)										// カメラの初期位置(Z座標)
+#define	POS_Z_CAM				(-100.0f)										// カメラの初期位置(Z座標)
 
 #define	VIEW_ANGLE				(D3DXToRadian(35.0f))							// ビュー平面の視野角
 #define	VIEW_ASPECT				((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	

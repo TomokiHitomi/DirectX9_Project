@@ -14,6 +14,23 @@
 
 
 //=============================================================================
+// ランダムベクトル生成処理
+//=============================================================================
+D3DXVECTOR3 RandVector(void)
+{
+	D3DXVECTOR3		vecTemp;
+	float			fAngleX, fAngleY;
+
+	fAngleX = float(D3DXToRadian(rand() % 180 + 1));
+	fAngleY = float(D3DXToRadian(rand() % 360 + 1));
+
+	vecTemp.x = sinf(fAngleX) * cosf(fAngleY);
+	vecTemp.y = sinf(fAngleX) * sinf(fAngleY);
+	vecTemp.z = cosf(fAngleX);
+	return(vecTemp);
+}
+
+//=============================================================================
 // 内積
 //=============================================================================
 float DotProduct(D3DXVECTOR3 *vl, D3DXVECTOR3 *vr)
@@ -187,6 +204,15 @@ D3DXCOLOR SetColorPallet(int nColor)
 	}
 	return temp;
 }
+
+//=============================================================================
+// カラーパレット呼び出し処理
+//=============================================================================
+D3DXCOLOR SetColorPalletRandom(void)
+{
+	return SetColorPallet(rand() % COLOR_PALLET_MAX);
+}
+
 
 //=============================================================================
 // int配列のシャッフル関数
