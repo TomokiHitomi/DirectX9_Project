@@ -43,7 +43,7 @@ void GameScene::Update(void)
 //=============================================================================
 void GameScene::Draw(void)
 {
-	//DrawPlayer();		// プレイヤー
+	DrawPlayer();		// プレイヤー
 	DrawCube();			// キューブ
 	DrawEffect();		// エフェクト
 }

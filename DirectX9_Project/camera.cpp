@@ -142,13 +142,13 @@ void UpdateCamera(void)
 	}
 
 	// マウスホイール
-	long ModUseZ = GetMobUseZ();
-	if (ModUseZ != 0)
-	{
-		camera->fLength -= ModUseZ * CAMERA_LENGTH_SPEED;
-		if (camera->fLength < CAMERA_LENGTH_MIN) { camera->fLength = CAMERA_LENGTH_MIN; }
-		else if (camera->fLength > CAMERA_LENGTH_MAX) { camera->fLength = CAMERA_LENGTH_MAX; }
-	}
+	//long ModUseZ = GetMobUseZ();
+	//if (ModUseZ != 0)
+	//{
+	//	camera->fLength -= ModUseZ * CAMERA_LENGTH_SPEED;
+	//	if (camera->fLength < CAMERA_LENGTH_MIN) { camera->fLength = CAMERA_LENGTH_MIN; }
+	//	else if (camera->fLength > CAMERA_LENGTH_MAX) { camera->fLength = CAMERA_LENGTH_MAX; }
+	//}
 
 	camera->fVAngle += (camera->fVAngleDiff - camera->fVAngle) * CAMERA_ROT_SPEED_AUTO;
 	camera->fHAngle += (camera->fHAngleDiff - camera->fHAngle) * CAMERA_ROT_SPEED_AUTO;

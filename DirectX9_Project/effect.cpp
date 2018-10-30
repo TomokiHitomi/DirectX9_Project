@@ -46,11 +46,12 @@ EFFECT					effectWk[EFFECT_MAX];
 D3DXMATRIX				g_mtxWorldEffect;
 
 // シェーダー関連
-ID3DXBuffer *errorEffect = 0;
-ID3DXEffect *effectshader;
+LPD3DXBUFFER errorEffect = NULL;
+LPD3DXEFFECT effectshader = NULL;
 UINT numPassEffect;
 HRESULT hrEffect;
 
+int g_nEffectColor = 0;
 int g_nEffectCount = 0;
 float g_fEffectMove = 0.0f;
 
@@ -139,21 +140,33 @@ void UninitEffect(void)
 	}
 
 	if (g_pD3DInstBuffEffect != NULL)
-	{// 頂点バッファの開放
+	{// インスタンシングバッファの開放
 		g_pD3DInstBuffEffect->Release();
 		g_pD3DInstBuffEffect = NULL;
 	}
 
 	if (g_pD3DIdxBuffEffect != NULL)
-	{// 頂点バッファの開放
+	{// インデックスバッファの開放
 		g_pD3DIdxBuffEffect->Release();
 		g_pD3DIdxBuffEffect = NULL;
 	}
 
 	if (g_pD3DDeclEffect != NULL)
-	{// 頂点バッファの開放
+	{// 頂点宣言の開放
 		g_pD3DDeclEffect->Release();
 		g_pD3DDeclEffect = NULL;
+	}
+
+	if (errorEffect != NULL)
+	{// シェーダデータバッファの開放
+		errorEffect->Release();
+		errorEffect = NULL;
+	}
+
+	if (effectshader != NULL)
+	{// シェーダの開放
+		effectshader->Release();
+		effectshader = NULL;
 	}
 }
 
@@ -174,66 +187,39 @@ void UpdateEffect(void)
 
 	g_fEffectMove += EFFECT_MOVE_SPEED;
 
+	long ModUseZ = GetMobUseZ();
+	if (ModUseZ != 0)
+	{
+		if (ModUseZ > 0)
+		{
+			g_nEffectColor++;
+			if (g_nEffectColor >= COLOR_PALLET_MAX)
+			{
+				g_nEffectColor = 0;
+			}
+		}
+		else
+		{
+			g_nEffectColor--;
+			if (g_nEffectColor < 0)
+			{
+				g_nEffectColor = COLOR_PALLET_MAX - 1;
+			}
+		}
+	}	
+
+
+
 	// エフェクト設置
-	if (GetKeyboardPress(DIK_SPACE))
+	if (IsMobUseLeftPressed())
 	{
 		for (unsigned int i = 0; i < EFFECT_SET; i++)
 		{
 			SetEffect(0,
-				D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_MAGENTA),
+				D3DXVECTOR2(10, 10), SetColorPallet(g_nEffectColor),
 				camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 				0.0001f, 0.0001f);
 		}
-
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_RED),
-		//	camera->posCameraAt + D3DXVECTOR3(0.0f,10.0f,0.0f),
-		//	0.0001f,0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_YELLOW),
-		//	camera->posCameraAt + D3DXVECTOR3(10.0f, 0.0f, 0.0f),
-		//	0.0001f,0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_MAGENTA),
-		//	camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, 10.0f),
-		//	0.0001f,0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_CYAN),
-		//	camera->posCameraAt + D3DXVECTOR3(-10.0f, 0.0f, 0.0f),
-		//	0.0001f,0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_GREEN),
-		//	camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, -10.0f),
-		//	0.0001f,0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10),SetColorPallet(COLOR_PALLET_BLUE),
-		//	camera->posCameraAt + D3DXVECTOR3(0.0f, -10.0f, 0.0f),
-		//	0.0001f,0.0001f);
-
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_RED),
-		//	camera->posCameraAt + D3DXVECTOR3(0.0f, 20.0f, 0.0f),
-		//	0.0001f, 0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_YELLOW),
-		//	camera->posCameraAt + D3DXVECTOR3(20.0f, 0.0f, 0.0f),
-		//	0.0001f, 0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_MAGENTA),
-		//	camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, 20.0f),
-		//	0.0001f, 0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_CYAN),
-		//	camera->posCameraAt + D3DXVECTOR3(-20.0f, 0.0f, 0.0f),
-		//	0.0001f, 0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_GREEN),
-		//	camera->posCameraAt + D3DXVECTOR3(0.0f, 0.0f, -20.0f),
-		//	0.0001f, 0.0001f);
-		//SetEffect(0,
-		//	D3DXVECTOR2(10, 10), SetColorPallet(COLOR_PALLET_BLUE),
-		//	camera->posCameraAt + D3DXVECTOR3(0.0f, -20.0f, 0.0f),
-		//	0.0001f, 0.0001f);
 	}
 
 	for (int i = 0; i < EFFECT_MAX; i++, effect++)
@@ -470,8 +456,9 @@ HRESULT MakeVertexEffect(LPDIRECT3DDEVICE9 pDevice)
 		for (unsigned int i = 0; i < EFFECT_MAX; i++, pInst++)
 		{
 			pInst->pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			pInst->diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			pInst->vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			//pInst->diffuse = SetColorPalletRandom();
+			pInst->diffuse = SetColorPallet(COLOR_PALLET_LIGHTBLUE);
+			pInst->vec = RandVector();
 			pInst->move = 0.0f;
 		}
 
@@ -541,8 +528,9 @@ void SetInstEffect(int nWk, D3DXVECTOR3 pos, D3DXCOLOR color)
 
 		// 座標の設定
 		pInst->pos = pos;
+		//pInst->diffuse = color;
 		pInst->diffuse = SetColorPalletRandom();
-		pInst->vec = RandVector();
+		//pInst->vec = RandVector();
 		pInst->move = g_fEffectMove;
 
 		// 座標データをアンロックする
@@ -657,16 +645,16 @@ void SetEffect(int nTex, D3DXVECTOR2 vec2Size, D3DXCOLOR color, D3DXVECTOR3 vecP
 		if (!effect->bUse)
 		{
 			effect->bUse = true;
-			effect->posEffect = vecPos;
-			effect->colorEffect = color;
-			effect->colorEffect.a = 1.0f;
-			effect->vec2Size = vec2Size;
-			effect->fSizeChange = fSizeChange;
-			effect->fAlphaChange = fAlphaChange;
-			effect->nTex = nTex;
+			//effect->posEffect = vecPos;
+			//effect->colorEffect = color;
+			//effect->colorEffect.a = 1.0f;
+			//effect->vec2Size = vec2Size;
+			//effect->fSizeChange = fSizeChange;
+			//effect->fAlphaChange = fAlphaChange;
+			//effect->nTex = nTex;
 			g_nEffectCount++;
 
-			SetInstEffect(i, effect->posEffect, effect->colorEffect);
+			SetInstEffect(i, vecPos, color);
 
 			//SetVtxEffect(i, effect->vec2Size.x, effect->vec2Size.y);
 			//SetDiffuseEffect(i, effect->colorEffect);
